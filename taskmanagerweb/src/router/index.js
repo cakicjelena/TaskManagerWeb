@@ -4,6 +4,8 @@ import HomeView from "../views/HomeView.vue";
 import Login from "../components/Login.vue";
 import Profile from "@/components/Profile.vue";
 import Registration from "../components/Registration.vue";
+import Project from "@/components/Project.vue";
+import Task from "@/components/Task.vue";
 
 Vue.use(VueRouter);
 
@@ -28,14 +30,25 @@ const routes = [
     component: Login,
   },
   {
+    path: "/projects",
+    name: "projdects",
+    component: Project,
+  },
+  {
     path: "/profile",
     name: "profile",
     component: Profile,
+    props: true,
   },
   {
     path: "/registration",
     name: "registration",
     component: Registration,
+  },
+  {
+    path: "/tasks",
+    name: "tasks",
+    component: Task,
   },
 ];
 

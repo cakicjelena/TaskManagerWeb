@@ -51,22 +51,29 @@
         id="password"
         aria-describedby="password-help-block"
       ></b-form-input>
-      <b-form-group label="Sex:" v-slot="{ ariaDescribedby }">
+      <b-form-group label="Gender:" v-slot="{ ariaDescribedby }">
         <b-form-radio
           v-model="selected"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
           value="M"
-          >M</b-form-radio
+          >Male</b-form-radio
         >
         <b-form-radio
           v-model="selected"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
           value="F"
-          >F</b-form-radio
+          >Female</b-form-radio
         >
       </b-form-group>
+      <label for="birthDate">Birth date: </label>
+      <b-form-datepicker
+        id="birthDate"
+        v-model="value"
+        class="mb-2"
+      ></b-form-datepicker>
+      <b-button variant="success" @click="register">Submit</b-button>
     </b-form>
   </div>
 </template>
@@ -81,6 +88,28 @@ export default {
       data: null,
     };
   },
-  methods: {},
+  methods: {
+    async register() {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          first_name: this.first_name,
+          last_name: this.last_name,
+          email: this.email,
+          password: this.password,
+          sex: this.sex,
+          birthDate: this.birthDate,
+        }),
+      };
+      const response = await fetch("http://127.0.0.1:8000/", requestOptions);
+      alert(this.first_name);
+      this.data = await response.json();
+      this.$router.push({ path: "/login" });
+    },
+  },
 };
 </script>

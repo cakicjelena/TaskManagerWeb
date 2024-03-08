@@ -29,7 +29,6 @@
     </b-form>
     <b-button variant="success" @click="login">Submit</b-button>
     <br />
-    <b-button variant="primary">Sign in</b-button>
   </div>
 </template>
 
