@@ -1,30 +1,46 @@
 <template>
-  <div class="mb-3">
-    <b-form>
-      <b-form-group>
-        <label for="first_name">{{ "First name:" + first_name }} </label>
-        <br />
-        <label for="last_name">{{ "Last name:" + last_name }} </label>
-        <br />
-        <label for="email">{{ "Email:" + email }} </label>
-        <br />
-        <label for="sex">{{ "Sex:" + sex }} </label>
-        <br />
-        <label for="birthDate">{{ "Birth date:" + birthDate }} </label>
-        <br />
-        <label for="is_superuser">{{ "Admin:" + is_superuser }} </label>
-      </b-form-group>
+  <div>
+    <md-tabs>
+      <md-tab id="tab-projects" md-label="Projects" @click="projects"></md-tab>
+      <md-tab id="tab-users" md-label="Users"></md-tab>
+      <md-tab
+        id="tab-edit"
+        md-label="Edit profile"
+        @click="editProfile"
+      ></md-tab>
+    </md-tabs>
+    <md-table md-card>
+      <md-table-toolbar>
+        <h1 class="md-title">Profile</h1>
+      </md-table-toolbar>
+      <md-table-row>
+        <md-table-cell class="profile-cell">First name:</md-table-cell>
+      </md-table-row>
+      <md-table-row>
+        <md-table-cell class="profile-cell">Last name:</md-table-cell>
+      </md-table-row>
+      <md-table-row>
+        <md-table-cell class="profile-cell">Email:</md-table-cell>
+      </md-table-row>
+      <md-table-row>
+        <md-table-cell class="profile-cell">Gender:</md-table-cell>
+      </md-table-row>
+      <md-table-row>
+        <md-table-cell class="profile-cell">Birth date:</md-table-cell>
+      </md-table-row>
+      <md-table-row>
+        <md-table-cell class="profile-cell">Admin:</md-table-cell>
+      </md-table-row>
+    </md-table>
 
-      <b-button variant="info" @click="projects">PROJECTS</b-button>
-      <b-button variant="danger" @click="editProfile">EDIT PROFILE</b-button>
-      <b-button variant="success" @click="logout">LOGOUT</b-button>
-    </b-form>
+    <b-button variant="success" @click="logout">LOGOUT</b-button>
   </div>
 </template>
 
 <script>
 export default {
   name: "ProfileWidget",
+
   props: {
     first_name: String,
     last_name: String,
@@ -58,3 +74,8 @@ export default {
   },
 };
 </script>
+<style>
+.profile-cell {
+  text-align: justify;
+}
+</style>

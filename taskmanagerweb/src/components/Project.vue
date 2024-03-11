@@ -1,31 +1,36 @@
 <template>
-  <div>
-    <b-form>
-      <b-list-group>
-        <b-list-group-item
-          v-onclick="goToTasks"
-          v-for="value in data"
-          :key="value.id"
-        >
+  <div class="proj">
+    <md-tabs>
+      <md-tab
+        id="tab-projectdetails"
+        md-label="Project details"
+        @click="projectDetails"
+      ></md-tab>
+      <md-tab
+        id="tab-projectcreate"
+        md-label="Create new project"
+        @click="createProject"
+      ></md-tab>
+      <md-tab
+        id="tab-projectputuser"
+        md-label="Put user on project"
+        @click="putUserOnProject"
+      ></md-tab>
+    </md-tabs>
+    <md-table>
+      <md-table-row> </md-table-row>
+      <md-table-row v-onclick="goToTasks" v-for="value in data" :key="value.id">
+        <md-table-cell>
           <a href="#" @click="goToTasks()">{{ value.name }}</a>
-        </b-list-group-item>
-      </b-list-group>
-    </b-form>
+        </md-table-cell>
+      </md-table-row>
+    </md-table>
     <b-form>
-      <b-button variant="info" @click="projectDetails" class="buttonClass"
-        >PROJECT DETAILS</b-button
-      >
       <b-button variant="info" @click="editProject" class="buttonClass"
         >EDIT PROJECT</b-button
       >
       <b-button variant="info" @click="deleteProject" class="buttonClass"
         >DELETE PROJECT</b-button
-      >
-      <b-button variant="info" @click="createProject" class="buttonClass"
-        >CREATE PROJECT</b-button
-      >
-      <b-button variant="info" @click="putUserOnProject" class="buttonClass"
-        >PUT USER ON PROJECT</b-button
       >
     </b-form>
   </div>
@@ -70,8 +75,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .buttonClass {
   margin: 10px;
+}
+.proj {
+  background-color: beige;
 }
 </style>

@@ -4,6 +4,10 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import router from "./router";
+import "vue-material/dist/vue-material.min.css";
+import "vue-material/dist/theme/default.css";
+import VueMaterial from "vue-material";
+
 //import { createRouter } from "vue-router";
 //import RegistratitionWidget from "./components/RegistratitionWidget.vue";
 //import Profile from "./components/Profile.vue";
@@ -25,7 +29,7 @@ import router from "./router";
 //const app = Vue.createApp({});
 
 //app.use(router);
-
+Vue.use(VueMaterial);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.config.productionTip = false;

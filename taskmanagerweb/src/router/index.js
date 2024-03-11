@@ -31,7 +31,7 @@ const routes = [
   },
   {
     path: "/projects",
-    name: "projdects",
+    name: "projects",
     component: Project,
   },
   {
