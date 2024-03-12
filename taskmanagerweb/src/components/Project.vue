@@ -2,9 +2,10 @@
   <div class="proj">
     <md-tabs>
       <md-tab
-        id="tab-projectdetails"
-        md-label="Project details"
-        @click="projectDetails"
+        id="tab-profile"
+        md-label="Profile"
+        name="Profile"
+        v-on:click="gotoprofile"
       ></md-tab>
       <md-tab
         id="tab-projectcreate"
@@ -17,14 +18,28 @@
         @click="putUserOnProject"
       ></md-tab>
     </md-tabs>
-    <md-table>
-      <md-table-row> </md-table-row>
-      <md-table-row v-onclick="goToTasks" v-for="value in data" :key="value.id">
-        <md-table-cell>
-          <a href="#" @click="goToTasks()">{{ value.name }}</a>
-        </md-table-cell>
+    <md-table md-card>
+      <md-table-toolbar>
+        <h1 class="md-title">Projects</h1>
+      </md-table-toolbar>
+      <md-table-row>
+        <md-table-head md-numeric>ID</md-table-head>
+        <md-table-head md-numeric>Name</md-table-head>
+        <md-table-head md-numeric>Create Date</md-table-head>
+        <md-table-head md-numeric>Deadline Date</md-table-head>
+        <md-table-head md-numeric>Description</md-table-head>
+        <md-table-head md-numeric>Project Manager ID</md-table-head>
+      </md-table-row>
+      <md-table-row v-for="(project, index) in data" :key="project.id">
+        <md-table-cell md-numeric>{{ index }}</md-table-cell>
+        <md-table-cell md-numeric>{{ project.name }}</md-table-cell>
+        <md-table-cell md-numeric>{{ project.createDate }}</md-table-cell>
+        <md-table-cell md-numeric>{{ project.deadlineDate }}</md-table-cell>
+        <md-table-cell md-numeric>{{ project.description }}</md-table-cell>
+        <md-table-cell md-numeric>{{ project.projectManagerId }}</md-table-cell>
       </md-table-row>
     </md-table>
+
     <b-form>
       <b-button variant="info" @click="editProject" class="buttonClass"
         >EDIT PROJECT</b-button
@@ -38,38 +53,36 @@
 
 <script>
 export default {
+  data() {
+    return {
+      data: null,
+    };
+  },
+  async mounted() {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    const response = await fetch(
+      "http://127.0.0.1:8000/getallprojects/",
+      requestOptions
+    );
+    this.data = await response.json();
+  },
   name: "ProjectWidget",
   props: {
     msg: String,
   },
-  data() {
-    return {
-      data: [
-        {
-          name: "TaskManager",
-          createDate: "2024-03-08",
-          deadlineDate: "2024-06-08",
-          desciption: "Nesto",
-          projectManagerId: "1",
-        },
-        {
-          name: "SearchInfo",
-          createDate: "2024-03-08",
-          deadlineDate: "2024-06-08",
-          desciption: "Nesto",
-          projectManagerId: "1",
-        },
-      ],
-    };
-  },
   methods: {
-    async projectDetails() {},
     async editProject() {},
     async deleteProject() {},
     async createProject() {},
     async putUserOnProject() {},
     async goToTasks() {
       this.$router.push({ path: "/tasks" });
+    },
+    async gotoprofile() {
+      this.$router.push({ path: "/profile" });
     },
   },
 };

@@ -1,115 +1,145 @@
 <template>
-  <div class="col-md-6" id="registerform">
-    <b-form>
-      <b-form-group id="input-group-1" label="First name:" label-for="input-1">
-        <b-form-input
-          :value="first_name"
-          @input="(event) => (first_name = event.target.value)"
-          v-model="first_name"
-          id="input-1"
-          type="first_name"
-          placeholder="Enter first name"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-2" label="Last name:" label-for="input-2">
-        <b-form-input
-          :value="last_name"
-          @input="(event) => (last_name = event.target.value)"
-          v-model="last_name"
-          id="input-2"
-          type="last_name"
-          placeholder="Enter last name"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-3" label="Email:" label-for="input-3">
-        <b-form-input
-          :value="email"
-          @input="(event) => (email = event.target.value)"
-          v-model="email"
-          id="input-3"
-          type="email"
-          placeholder="Enter email"
-        ></b-form-input>
-      </b-form-group>
-      <label for="password">Password:</label>
-      <b-form-input
-        :value="password"
-        @input="(event) => (password = event.target.value)"
-        v-model="password"
-        type="password"
-        placeholder="Enter password"
-        id="password"
-        aria-describedby="password-help-block"
-      ></b-form-input>
-      <label for="password">Confirm password:</label>
-      <b-form-input
-        :value="password"
-        @input="(event) => (password = event.target.value)"
-        v-model="password"
-        type="password"
-        placeholder="Confirm password"
-        id="password"
-        aria-describedby="password-help-block"
-      ></b-form-input>
-      <b-form-group label="Gender:" v-slot="{ ariaDescribedby }">
-        <b-form-radio
-          v-model="selected"
-          :aria-describedby="ariaDescribedby"
-          name="some-radios"
-          value="M"
-          >Male</b-form-radio
-        >
-        <b-form-radio
-          v-model="selected"
-          :aria-describedby="ariaDescribedby"
-          name="some-radios"
-          value="F"
-          >Female</b-form-radio
-        >
-      </b-form-group>
-      <label for="birthDate">Birth date: </label>
-      <b-form-datepicker
-        id="birthDate"
-        v-model="value"
-        class="mb-2"
-      ></b-form-datepicker>
-      <b-button variant="success" @click="register">Submit</b-button>
-    </b-form>
+  <div>
+    <form novalidate class="md-layout">
+      <md-card class="md-layout-item md-size-50 md-small-size-100">
+        <md-card-header>
+          <div class="md-title">User</div>
+        </md-card-header>
+
+        <md-card-content>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="first_name">First Name</label>
+                <md-input
+                  name="first_name"
+                  id="first_name"
+                  autocomplete="given-name"
+                  v-model="form.first_name"
+                  :disabled="sending"
+                />
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="last_name">Last Name</label>
+                <md-input
+                  name="last_name"
+                  id="last_name"
+                  autocomplete="family-name"
+                  v-model="form.last_name"
+                  :disabled="sending"
+                />
+              </md-field>
+            </div>
+          </div>
+
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="sex">Gender</label>
+                <md-select
+                  name="sex"
+                  id="sex"
+                  v-model="form.sex"
+                  md-dense
+                  :disabled="sending"
+                >
+                  <md-option></md-option>
+                  <md-option value="1">Male</md-option>
+                  <md-option value="0">Female</md-option>
+                </md-select>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-small-size-100">
+              <md-datepicker v-model="birthDate">
+                <label>Birth Date</label>
+              </md-datepicker>
+            </div>
+          </div>
+
+          <md-field>
+            <label for="email">Email</label>
+            <md-input
+              type="email"
+              name="email"
+              id="email"
+              autocomplete="email"
+              v-model="form.email"
+              :disabled="sending"
+            />
+          </md-field>
+          <md-field md-has-password>
+            <label>Password</label>
+            <md-input v-model="password" type="password"></md-input>
+          </md-field>
+          <md-field md-has-password>
+            <label>Confirm Password</label>
+            <md-input v-model="cpassword" type="password"></md-input>
+          </md-field>
+          <md-checkbox v-model="is_superuser">Admin</md-checkbox>
+        </md-card-content>
+
+        <md-progress-bar md-mode="indeterminate" v-if="sending" />
+
+        <md-card-actions>
+          <md-button type="submit" class="md-primary" :disabled="sending"
+            >Register</md-button
+          >
+        </md-card-actions>
+      </md-card>
+    </form>
   </div>
 </template>
+
 <script>
 export default {
-  name: "RegistrationWidget",
-  props: {
-    msg: String,
-  },
-  data() {
-    return {
-      data: null,
-    };
-  },
+  name: "FormValidation",
+  data: () => ({
+    form: {
+      first_mame: null,
+      last_name: null,
+      sex: null,
+      birthDate: null,
+      email: null,
+      password: null,
+      cpassword: null,
+      is_superuser: false,
+    },
+    sending: false,
+  }),
+
   methods: {
-    async register() {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          first_name: this.first_name,
-          last_name: this.last_name,
-          email: this.email,
-          password: this.password,
-          sex: this.sex,
-          birthDate: this.birthDate,
-        }),
-      };
-      const response = await fetch("http://127.0.0.1:8000/", requestOptions);
-      alert(this.first_name);
-      this.data = await response.json();
-      this.$router.push({ path: "/login" });
+    clearForm() {
+      this.$v.$reset();
+      this.form.first_name = null;
+      this.form.last_name = null;
+      this.form.birthDate = null;
+      this.form.sex = null;
+      this.form.email = null;
+      this.form.password = null;
+      this.form.cpassword = null;
+      this.form.is_superuser = null;
+    },
+    saveUser() {
+      this.sending = true;
+
+      this.clearForm();
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.md-progress-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.md-layout {
+  justify-content: center;
+}
+</style>

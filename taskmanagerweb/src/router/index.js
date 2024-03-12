@@ -6,6 +6,7 @@ import Profile from "@/components/Profile.vue";
 import Registration from "../components/Registration.vue";
 import Project from "@/components/Project.vue";
 import Task from "@/components/Task.vue";
+import User from "@/components/User.vue";
 
 Vue.use(VueRouter);
 
@@ -49,6 +50,11 @@ const routes = [
     path: "/tasks",
     name: "tasks",
     component: Task,
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: User,
   },
 ];
 

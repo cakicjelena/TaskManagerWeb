@@ -7,7 +7,6 @@
         />
         <div class="md-title">Task Manager</div>
       </div>
-
       <div class="form">
         <md-field>
           <label>E-mail</label>
@@ -66,7 +65,17 @@ export default {
       );
       this.data = await response.json();
       this.loading = false;
-      this.$router.push({ path: "/profile", props: { first_name: "Jelena" } });
+      this.$router.push({
+        name: "profile",
+        params: {
+          first_name: this.data["first_name"],
+          last_name: this.data["last_name"],
+          email: this.data["email"],
+          sex: this.data["sex"],
+          birthDate: this.data["birthDate"],
+          is_superuser: this.data["is_superuser"],
+        },
+      });
     },
   },
 };
