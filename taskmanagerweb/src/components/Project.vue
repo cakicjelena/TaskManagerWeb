@@ -23,6 +23,7 @@
         <h1 class="md-title">Projects</h1>
       </md-table-toolbar>
       <md-table-row>
+        <md-table-head md-numeric>INDEX</md-table-head>
         <md-table-head md-numeric>ID</md-table-head>
         <md-table-head md-numeric>Name</md-table-head>
         <md-table-head md-numeric>Create Date</md-table-head>
@@ -32,7 +33,12 @@
       </md-table-row>
       <md-table-row v-for="(project, index) in data" :key="project.id">
         <md-table-cell md-numeric>{{ index }}</md-table-cell>
-        <md-table-cell md-numeric>{{ project.name }}</md-table-cell>
+        <md-table-cell md-numeric>{{ project.id }}</md-table-cell>
+        <md-table-cell md-numeric
+          ><a href="#" @click="goToTasks(project.id)">{{
+            project.name
+          }}</a></md-table-cell
+        >
         <md-table-cell md-numeric>{{ project.createDate }}</md-table-cell>
         <md-table-cell md-numeric>{{ project.deadlineDate }}</md-table-cell>
         <md-table-cell md-numeric>{{ project.description }}</md-table-cell>
@@ -76,10 +82,14 @@ export default {
   methods: {
     async editProject() {},
     async deleteProject() {},
-    async createProject() {},
-    async putUserOnProject() {},
-    async goToTasks() {
-      this.$router.push({ path: "/tasks" });
+    async createProject() {
+      this.$router.push({ path: "/projectcreate" });
+    },
+    async putUserOnProject() {
+      this.$router.push({ path: "/useronproject" });
+    },
+    async goToTasks(ID) {
+      this.$router.push({ path: "/tasks/", query: { id: ID } });
     },
     async gotoprofile() {
       this.$router.push({ path: "/profile" });

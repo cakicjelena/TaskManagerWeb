@@ -72,9 +72,9 @@ export default {
     first_name: String,
     last_name: String,
     email: String,
-    sex: Number,
+    sex: Boolean,
     birthDate: Date,
-    is_superuser: Number,
+    is_superuser: Boolean,
   },
   components: {
     // BarWidget,

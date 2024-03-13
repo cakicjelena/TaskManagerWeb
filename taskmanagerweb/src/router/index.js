@@ -7,6 +7,8 @@ import Registration from "../components/Registration.vue";
 import Project from "@/components/Project.vue";
 import Task from "@/components/Task.vue";
 import User from "@/components/User.vue";
+import ProjectCreate from "@/components/ProjectCreate.vue";
+import UserOnProject from "@/components/UserOnProject.vue";
 
 Vue.use(VueRouter);
 
@@ -34,6 +36,16 @@ const routes = [
     path: "/projects",
     name: "projects",
     component: Project,
+  },
+  {
+    path: "/projectcreate",
+    name: "projectcreate",
+    component: ProjectCreate,
+  },
+  {
+    path: "/useronproject",
+    name: "useronproject",
+    component: UserOnProject,
   },
   {
     path: "/profile",

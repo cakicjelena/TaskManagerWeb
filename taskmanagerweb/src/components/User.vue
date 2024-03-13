@@ -1,5 +1,13 @@
 <template>
   <div>
+    <md-tabs>
+      <md-tab
+        id="tab-profile"
+        md-label="Profile"
+        name="Profile"
+        v-on:click="gotoprofile"
+      ></md-tab>
+    </md-tabs>
     <md-table md-card>
       <md-table-toolbar>
         <h1 class="md-title">Users</h1>
@@ -50,6 +58,11 @@ export default {
       requestOptions
     );
     this.data = await response.json();
+  },
+  methods: {
+    gotoprofile() {
+      this.$router.push({ path: "/profile" });
+    },
   },
 };
 </script>

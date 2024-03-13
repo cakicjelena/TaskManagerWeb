@@ -1,46 +1,78 @@
 <template>
-  <div class="row">
-    <div class="col-3">
-      <h3>TO DO</h3>
-      <draggable class="list-group" :list="list1" group="tasks" @change="log">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in list1"
-          :key="element.name"
+  <div>
+    <md-tabs>
+      <md-tab
+        id="tab-project"
+        md-label="Projects"
+        name="Projects"
+        v-on:click="gotoprojects"
+      ></md-tab>
+      <md-tab
+        id="tab-taskCreate"
+        md-label="Create task"
+        name="Create Task"
+        v-on:click="gototaskcreate"
+      ></md-tab>
+    </md-tabs>
+    <br />
+    <div class="row">
+      <div class="col-3">
+        <h3>TO DO</h3>
+        <draggable
+          class="list-group"
+          :list="this.list1"
+          group="tasks"
+          @change="log"
         >
-          {{ element.name }} {{ index }}
-        </div>
-      </draggable>
-    </div>
+          <div
+            class="list-group-item"
+            v-for="(element, index) in list1"
+            :key="element.name"
+          >
+            {{ index }} {{ element.name }}
+          </div>
+        </draggable>
+      </div>
 
-    <div class="col-3">
-      <h3>IN PROGRESS</h3>
-      <draggable class="list-group" :list="list2" group="tasks" @change="log">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in list2"
-          :key="element.name"
+      <div class="col-3">
+        <h3>IN PROGRESS</h3>
+        <draggable
+          class="list-group"
+          :list="this.list2"
+          group="tasks"
+          @change="log"
         >
-          {{ element.name }} {{ index }}
-        </div>
-      </draggable>
-    </div>
+          <div
+            class="list-group-item"
+            v-for="(element, index) in list2"
+            :key="element.name"
+          >
+            {{ index }} {{ element.name }}
+          </div>
+        </draggable>
+      </div>
 
-    <div class="col-3">
-      <h3>DONE</h3>
-      <draggable class="list-group" :list="list3" group="tasks" @change="log">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in list3"
-          :key="element.name"
+      <div class="col-3">
+        <h3>DONE</h3>
+        <draggable
+          class="list-group"
+          :list="this.list3"
+          group="tasks"
+          @change="log"
         >
-          {{ element.name }} {{ index }}
-        </div>
-      </draggable>
+          <div
+            class="list-group-item"
+            v-for="(element, index) in list3"
+            :key="element.name"
+          >
+            {{ index }} {{ element.name }}
+          </div>
+        </draggable>
+      </div>
     </div>
-    <rawDisplayer class="col-3" :value="list1" title="List 1" />
-    <rawDisplayer class="col-3" :value="list2" title="List 2" />
-    <rawDisplayer class="col-3" :value="list3" title="List 3" />
+    <br />
+    <br />
+    <b-button variant="success" @click="taskdelete">Delete task</b-button>
   </div>
 </template>
 
@@ -59,22 +91,31 @@ export default {
   },
   data() {
     return {
-      list1: [
-        { name: " Create Database", id: 1 },
-        { name: "Restful api", id: 2 },
-        { name: "Fill database", id: 3 },
-      ],
-      list2: [
-        { name: "web Design", id: 4 },
-        { name: "Testing", id: 5 },
-      ],
-      list3: [
-        { name: "Fixing bugs", id: 6 },
-        { name: "Updating", id: 7 },
-      ],
+      data: null,
+      list1: [],
+      list2: [],
+      list3: [],
     };
   },
+  async mounted() {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const response = await fetch(
+      "http://127.0.0.1:8000/getalltasksofproject/" + this.$route.query.id,
+      requestOptions
+    );
+
+    this.data = await response.json();
+    this.initTasks();
+    // alert(this.data);
+  },
   methods: {
+    gotoprojects() {},
+    gototaskcreate() {},
+    taskdelete() {},
     add: function () {
       this.list.push({ name: "Testing" });
     },
@@ -87,8 +128,27 @@ export default {
       };
     },
     log: function (evt) {
-      window.console.log(evt);
+      alert(evt);
+    },
+    initTasks: function () {
+      for (let i = 0; i < this.data.length; i++) {
+        //this.list.push({ name: value["name"] });
+        if (this.data[i]["status"] == 1)
+          this.list1.push({ name: this.data[i]["name"] });
+        else if (this.data[i]["status"] == 2)
+          this.list2.push({ name: this.data[i]["name"] });
+        else this.list3.push({ name: this.data[i]["name"] });
+        //this.list1.push({ name: value["name"] });
+        //alert("aaaaaaaaa");
+      }
     },
   },
 };
 </script>
+
+<style>
+.row {
+  justify-content: space-between;
+  background-color: whitesmoke;
+}
+</style>

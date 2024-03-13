@@ -99,7 +99,7 @@ export default {
   name: "FormValidation",
   data: () => ({
     form: {
-      first_mame: null,
+      first_name: null,
       last_name: null,
       sex: null,
       birthDate: null,
