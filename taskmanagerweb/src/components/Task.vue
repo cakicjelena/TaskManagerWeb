@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs>
+    <md-tabs class="md-primary">
       <md-tab
         id="tab-project"
         md-label="Projects"
@@ -26,10 +26,10 @@
         >
           <div
             class="list-group-item"
-            v-for="(element, index) in list1"
-            :key="element.name"
+            v-for="element in list1"
+            :key="element.id"
           >
-            {{ index }} {{ element.name }}
+            {{ element.name }}
           </div>
         </draggable>
       </div>
@@ -44,10 +44,10 @@
         >
           <div
             class="list-group-item"
-            v-for="(element, index) in list2"
+            v-for="element in list2"
             :key="element.name"
           >
-            {{ index }} {{ element.name }}
+            {{ element.name }}
           </div>
         </draggable>
       </div>
@@ -62,17 +62,17 @@
         >
           <div
             class="list-group-item"
-            v-for="(element, index) in list3"
+            v-for="element in list3"
             :key="element.name"
           >
-            {{ index }} {{ element.name }}
+            {{ element.name }}
           </div>
         </draggable>
       </div>
     </div>
     <br />
     <br />
-    <b-button variant="success" @click="taskdelete">Delete task</b-button>
+    <b-button variant="info" @click="taskdelete">Delete task</b-button>
   </div>
 </template>
 
@@ -113,8 +113,12 @@ export default {
     // alert(this.data);
   },
   methods: {
-    gotoprojects() {},
-    gototaskcreate() {},
+    gotoprojects() {
+      this.$router.push({ path: "/projects" });
+    },
+    gototaskcreate() {
+      this.$router.push({ path: "/taskcreate" });
+    },
     taskdelete() {},
     add: function () {
       this.list.push({ name: "Testing" });
@@ -132,14 +136,11 @@ export default {
     },
     initTasks: function () {
       for (let i = 0; i < this.data.length; i++) {
-        //this.list.push({ name: value["name"] });
         if (this.data[i]["status"] == 1)
           this.list1.push({ name: this.data[i]["name"] });
         else if (this.data[i]["status"] == 2)
           this.list2.push({ name: this.data[i]["name"] });
         else this.list3.push({ name: this.data[i]["name"] });
-        //this.list1.push({ name: value["name"] });
-        //alert("aaaaaaaaa");
       }
     },
   },
@@ -148,7 +149,6 @@ export default {
 
 <style>
 .row {
-  justify-content: space-between;
-  background-color: whitesmoke;
+  justify-content: center;
 }
 </style>

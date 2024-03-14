@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs>
+    <md-tabs class="md-primary">
       <md-tab
         id="tab-project"
         md-label="Projects"

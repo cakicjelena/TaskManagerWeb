@@ -1,6 +1,6 @@
 <template>
   <div class="proj">
-    <md-tabs>
+    <md-tabs class="md-primary">
       <md-tab
         id="tab-profile"
         md-label="Profile"
@@ -23,7 +23,6 @@
         <h1 class="md-title">Projects</h1>
       </md-table-toolbar>
       <md-table-row>
-        <md-table-head md-numeric>INDEX</md-table-head>
         <md-table-head md-numeric>ID</md-table-head>
         <md-table-head md-numeric>Name</md-table-head>
         <md-table-head md-numeric>Create Date</md-table-head>
@@ -31,8 +30,7 @@
         <md-table-head md-numeric>Description</md-table-head>
         <md-table-head md-numeric>Project Manager ID</md-table-head>
       </md-table-row>
-      <md-table-row v-for="(project, index) in data" :key="project.id">
-        <md-table-cell md-numeric>{{ index }}</md-table-cell>
+      <md-table-row v-for="project in data" :key="project.id">
         <md-table-cell md-numeric>{{ project.id }}</md-table-cell>
         <md-table-cell md-numeric
           ><a href="#" @click="goToTasks(project.id)">{{

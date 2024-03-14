@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
+//import HomeView from "../views/HomeView.vue";
 import Login from "../components/Login.vue";
 import Profile from "@/components/Profile.vue";
 import Registration from "../components/Registration.vue";
@@ -9,14 +9,21 @@ import Task from "@/components/Task.vue";
 import User from "@/components/User.vue";
 import ProjectCreate from "@/components/ProjectCreate.vue";
 import UserOnProject from "@/components/UserOnProject.vue";
+import Home from "@/components/Home.vue";
+import TaskCreate from "@/components/TaskCreate.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    redirect: "/home",
+    //name: "home",
+    //component: HomeView,
+  },
+  {
+    path: "/home",
+    component: Home,
   },
   {
     path: "/about",
@@ -62,6 +69,12 @@ const routes = [
     path: "/tasks",
     name: "tasks",
     component: Task,
+  },
+
+  {
+    path: "/taskcreate",
+    name: "taskcreate",
+    component: TaskCreate,
   },
   {
     path: "/users",

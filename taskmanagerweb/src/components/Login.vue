@@ -3,7 +3,7 @@
     <md-content class="md-elevation-3">
       <div class="title">
         <img
-          src="https://pbs.twimg.com/profile_images/126815649/logo_square_400x400.png"
+          src="https://static.vecteezy.com/system/resources/previews/028/749/995/non_2x/task-manager-icon-vector.jpg"
         />
         <div class="md-title">Task Manager</div>
       </div>
@@ -84,7 +84,7 @@ export default {
 <style lang="scss">
 .centered-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   position: relative;
   height: 100vh;

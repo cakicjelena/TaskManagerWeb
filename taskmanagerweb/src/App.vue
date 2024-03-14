@@ -6,17 +6,6 @@ import { MdTabs } from 'vue-material';
       <router-link to="/registration">Sign up</router-link>
     </nav>
     <router-view />
-    <div class="centered-container">
-      <md-content class="md-elevation-3">
-        <div class="title">
-          <img
-            src="https://pbs.twimg.com/profile_images/126815649/logo_square_400x400.png"
-          />
-          <div class="md-title">Task Manager</div>
-          <div class="md-body-1">System for managing tasks</div>
-        </div>
-      </md-content>
-    </div>
   </div>
 </template>
 
@@ -30,12 +19,13 @@ import { MdTabs } from 'vue-material';
 }
 
 nav {
-  padding: 30px;
+  padding: 60px;
 }
 
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  font-size: 25px;
 }
 
 nav a.router-link-exact-active {

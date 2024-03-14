@@ -1,12 +1,6 @@
 <template>
   <div>
-    <md-tabs>
-      <md-tab
-        id="tab-profile"
-        md-label="Profile"
-        name="Profile"
-        v-on:click="gotoprofile"
-      ></md-tab>
+    <md-tabs class="md-primary">
       <md-tab
         id="tab-projecs"
         md-label="Projects"
@@ -57,6 +51,7 @@
           >Admin: {{ $route.params.is_superuser }}</md-table-cell
         >
       </md-table-row>
+      <br />
     </md-table>
 
     <b-button variant="success" @click="logout">LOGOUT</b-button>
@@ -113,5 +108,8 @@ export default {
 <style>
 .profile-cell {
   text-align: justify;
+}
+md-tabs {
+  color: #e1bee7;
 }
 </style>

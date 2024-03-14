@@ -2,16 +2,16 @@
   <div>
     <md-tabs class="md-primary">
       <md-tab
-        id="tab-project"
-        md-label="Projects"
-        name="Projects"
-        v-on:click="gotoproject"
+        id="tab-task"
+        md-label="Tasks"
+        name="Tasks"
+        v-on:click="gototasks"
       ></md-tab>
     </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
-          <div class="md-title">Project</div>
+          <div class="md-title">Task</div>
         </md-card-header>
 
         <md-card-content>
@@ -29,13 +29,13 @@
             </div>
 
             <div class="md-layout-item md-small-size-100">
-              <md-datepicker v-model="form.createDate">
-                <label>Create Date</label>
+              <md-datepicker v-model="form.startDate">
+                <label>Start Date</label>
               </md-datepicker>
             </div>
             <div class="md-layout-item md-small-size-100">
-              <md-datepicker v-model="form.deadlineDate">
-                <label>Deadline Date</label>
+              <md-datepicker v-model="form.finishDate">
+                <label>Finish Date</label>
               </md-datepicker>
             </div>
 
@@ -53,8 +53,21 @@
 
             <div class="md-layout-item">
               <md-field>
-                <label for="projectManagerId">Project Manager</label>
-                <md-select v-model="form.projectManagerId">
+                <label for="projectManagerId">Type</label>
+                <md-select v-model="form.type">
+                  <md-option
+                    v-for="element in data"
+                    v-bind:key="element.id"
+                    :value="element.first_name"
+                    >{{ element.email }}</md-option
+                  >
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item">
+              <md-field>
+                <label for="projectManagerId">Status</label>
+                <md-select v-model="form.status">
                   <md-option
                     v-for="element in data"
                     v-bind:key="element.id"
@@ -70,8 +83,11 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending"
-            >Create project</md-button
+          <md-button
+            type="submit"
+            class="md-raised md-primary"
+            :disabled="sending"
+            >Create task</md-button
           >
         </md-card-actions>
       </md-card>
@@ -81,15 +97,15 @@
 
 <script>
 export default {
-  name: "ProjectCreate",
+  name: "TaskCreate",
   data: () => ({
     form: {
       name: null,
-      createDate: null,
-      deadlineDate: null,
+      startDate: null,
+      finishDate: null,
       description: null,
-      projectManagerId: null,
-      projectManagerEmail: null,
+      status: null,
+      type: null,
     },
 
     sending: false,
@@ -111,18 +127,20 @@ export default {
     clearForm() {
       this.$v.$reset();
       this.form.name = null;
-      this.form.createDate = null;
-      this.form.deadlineDate = null;
+      this.form.startDate = null;
+      this.form.finishDate = null;
       this.form.description = null;
-      this.form.projectManagerId = null;
+      this.form.status = null;
+      this.form.type = null;
     },
     saveUser() {
       this.sending = true;
 
       this.clearForm();
     },
-    async gotoproject() {
-      this.$router.push({ path: "/projects" });
+    async gototasks() {
+      //vrati me na konkretne taskove
+      //this.$router.push({ path: "/tasks" });
     },
   },
 };
