@@ -19,9 +19,8 @@
         </md-field>
       </div>
 
-      <div class="actions md-layout md-alignment-center-space-between">
-        <a href=".">Reset password</a>
-        <md-button class="md-raised md-primary" @click="login"
+      <div class="actions md-layout md-alignment-center">
+        <md-button id="login" class="md-raised md-primary" @click="login"
           >Log in</md-button
         >
       </div>
@@ -64,18 +63,23 @@ export default {
         requestOptions
       );
       this.data = await response.json();
+      if (response.status == 400) alert("Wrong password");
+      else {
+        this.$router.push({
+          name: "profile",
+          params: {
+            id: this.data["id"],
+            first_name: this.data["first_name"],
+            last_name: this.data["last_name"],
+            email: this.data["email"],
+            sex: this.data["sex"],
+            birthDate: this.data["birthDate"],
+            is_superuser: this.data["is_superuser"],
+          },
+        });
+      }
+
       this.loading = false;
-      this.$router.push({
-        name: "profile",
-        params: {
-          first_name: this.data["first_name"],
-          last_name: this.data["last_name"],
-          email: this.data["email"],
-          sex: this.data["sex"],
-          birthDate: this.data["birthDate"],
-          is_superuser: this.data["is_superuser"],
-        },
-      });
     },
   },
 };
@@ -135,6 +139,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  #login {
+    background-color: blueviolet;
   }
 }
 </style>

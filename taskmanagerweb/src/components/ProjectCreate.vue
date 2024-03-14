@@ -70,7 +70,10 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending"
+          <md-button
+            type="submit"
+            class="md-raised md-primary"
+            :disabled="sending"
             >Create project</md-button
           >
         </md-card-actions>

@@ -29,7 +29,7 @@
             v-for="element in list1"
             :key="element.id"
           >
-            {{ element.name }}
+            <a href="#" @click="gototaskdetails"> {{ element.name }} </a>
           </div>
         </draggable>
       </div>
@@ -45,9 +45,9 @@
           <div
             class="list-group-item"
             v-for="element in list2"
-            :key="element.name"
+            :key="element.id"
           >
-            {{ element.name }}
+            <a href="#" @click="gototaskdetails"> {{ element.name }} </a>
           </div>
         </draggable>
       </div>
@@ -63,9 +63,11 @@
           <div
             class="list-group-item"
             v-for="element in list3"
-            :key="element.name"
+            :key="element.id"
           >
-            {{ element.name }}
+            <a href="#" @click="gototaskdetails">
+              {{ element.name }}
+            </a>
           </div>
         </draggable>
       </div>
@@ -113,6 +115,9 @@ export default {
     // alert(this.data);
   },
   methods: {
+    gototaskdetails() {
+      this.$router.push({ path: "/taskdetails" });
+    },
     gotoprojects() {
       this.$router.push({ path: "/projects" });
     },

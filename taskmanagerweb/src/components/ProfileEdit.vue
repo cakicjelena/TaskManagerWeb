@@ -1,0 +1,164 @@
+<template>
+  <div>
+    <form novalidate class="md-layout">
+      <md-card class="md-layout-item md-size-50 md-small-size-100">
+        <md-card-header>
+          <div class="md-title">Edit profile</div>
+        </md-card-header>
+
+        <md-card-content>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="first_name">First Name</label>
+                <md-input
+                  name="first_name"
+                  id="first_name"
+                  autocomplete="given-name"
+                  v-model="form.first_name"
+                  :disabled="sending"
+                />
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="last_name">Last Name</label>
+                <md-input
+                  name="last_name"
+                  id="last_name"
+                  autocomplete="family-name"
+                  v-model="form.last_name"
+                  :disabled="sending"
+                />
+              </md-field>
+            </div>
+          </div>
+
+          <md-field>
+            <label for="email">Email</label>
+            <md-input
+              type="email"
+              name="email"
+              id="email"
+              autocomplete="email"
+              v-model="form.email"
+              :disabled="sending"
+            />
+          </md-field>
+          <md-field md-has-password>
+            <label>Password</label>
+            <md-input v-model="password" type="password"></md-input>
+          </md-field>
+          <md-field md-has-password>
+            <label>Confirm Password</label>
+            <md-input v-model="cpassword" type="password"></md-input>
+          </md-field>
+        </md-card-content>
+
+        <md-progress-bar md-mode="indeterminate" v-if="sending" />
+
+        <md-card-actions>
+          <md-button
+            type="submit"
+            class="md-raised md-primary"
+            :disabled="sending"
+            @click="submit"
+            >Submit</md-button
+          >
+        </md-card-actions>
+      </md-card>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "FormValidation",
+  data: () => ({
+    form: {
+      first_name: null,
+      last_name: null,
+      sex: null,
+      birthDate: null,
+      email: null,
+      password: null,
+      cpassword: null,
+    },
+    sending: false,
+  }),
+  mounted() {
+    this.form.first_name = this.$route.params.first_name;
+    this.form.last_name = this.$route.params.last_name;
+    this.form.birthDate = this.$route.params.birthDate;
+    this.form.sex = this.$route.params.sex;
+    this.form.email = this.$route.params.email;
+    this.form.password = this.$route.params.password;
+    this.form.cpassword = this.$route.params.cpassword;
+  },
+  methods: {
+    clearForm() {
+      this.$v.$reset();
+      this.form.first_name = null;
+      this.form.last_name = null;
+      this.form.birthDate = null;
+      this.form.sex = null;
+      this.form.email = null;
+      this.form.password = null;
+      this.form.cpassword = null;
+      this.form.is_superuser = null;
+    },
+    saveUser() {
+      this.sending = true;
+
+      this.clearForm();
+    },
+    async submit() {
+      this.loading = true;
+
+      //alert(this.$cookies.get("csrftoken"));
+      this.bodyData = {
+        email: this.email,
+        password: this.password,
+      };
+      //alert(this.bodyData);
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify(this.bodyData),
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/editprofile/" + this.$route.params.id,
+        requestOptions
+      );
+
+      this.data = await response.json();
+      this.$router.push({
+        name: "profile",
+        params: {
+          first_name: this.data["first_name"],
+          last_name: this.data["last_name"],
+          email: this.data["email"],
+          sex: this.data["sex"],
+          birthDate: this.data["birthDate"],
+          is_superuser: this.data["is_superuser"],
+        },
+      });
+
+      this.loading = false;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.md-progress-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.md-layout {
+  justify-content: center;
+}
+</style>

@@ -8,30 +8,10 @@ import "vue-material/dist/vue-material.min.css";
 import "vue-material/dist/theme/default.css";
 import VueMaterial from "vue-material";
 
-//import { createRouter } from "vue-router";
-//import RegistratitionWidget from "./components/RegistratitionWidget.vue";
-//import Profile from "./components/Profile.vue";
-//import VueRouter from "vue-router";
-
-//const Profile_p = { template: "<div>Profile</div>" };
-//const RegistrationWidget = { template: "<div>RegistrationWidget</div>" };
-
-//const routes = [
-//{ path: "/profile", component: Profile },
-//{ path: "/registration", component: RegistratitionWidget },
-//];
-
-//const router = VueRouter.createRouter({
-//history: VueRouter.createWebHashHistory(),
-//routes,
-//});
-
-//const app = Vue.createApp({});
-
-//app.use(router);
 Vue.use(VueMaterial);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+
 Vue.config.productionTip = false;
 
 new Vue({

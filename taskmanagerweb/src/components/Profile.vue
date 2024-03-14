@@ -51,10 +51,13 @@
           >Admin: {{ $route.params.is_superuser }}</md-table-cell
         >
       </md-table-row>
-      <br />
     </md-table>
-
-    <b-button variant="success" @click="logout">LOGOUT</b-button>
+    <br />
+    <div id="buttondiv">
+      <b-button variant="info" @click="editprofile">EDIT PROFILE</b-button>
+      <br />
+      <b-button variant="info" @click="logout">LOGOUT</b-button>
+    </div>
   </div>
 </template>
 
@@ -92,9 +95,21 @@ export default {
       this.data = await response.json();
       this.$router.push({ name: "login" });
     },
-    async editProfile() {},
-    async gotoprofile() {
-      this.$router.push({ path: "/profile" });
+    async editprofile() {
+      this.$router.push({
+        name: "profileedit",
+        params: {
+          id: this.$route.params.id,
+          first_name: this.first_name,
+          last_name: this.last_name,
+          email: this.email,
+          sex: this.sex,
+          birthDate: this.birthDate,
+          password: null,
+          cpassword: null,
+          is_superuser: this.is_superuser,
+        },
+      });
     },
     async gotoprojects() {
       this.$router.push({ path: "/projects" });
@@ -105,11 +120,13 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss" scoped>
 .profile-cell {
   text-align: justify;
 }
-md-tabs {
-  color: #e1bee7;
+#buttondiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

@@ -11,6 +11,8 @@ import ProjectCreate from "@/components/ProjectCreate.vue";
 import UserOnProject from "@/components/UserOnProject.vue";
 import Home from "@/components/Home.vue";
 import TaskCreate from "@/components/TaskCreate.vue";
+import TaskDetails from "@/components/TaskDetails.vue";
+import ProfileEdit from "@/components/ProfileEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -61,6 +63,11 @@ const routes = [
     props: true,
   },
   {
+    path: "/profileedit",
+    name: "profileedit",
+    component: ProfileEdit,
+  },
+  {
     path: "/registration",
     name: "registration",
     component: Registration,
@@ -70,7 +77,11 @@ const routes = [
     name: "tasks",
     component: Task,
   },
-
+  {
+    path: "/taskdetails",
+    name: "taskdetails",
+    component: TaskDetails,
+  },
   {
     path: "/taskcreate",
     name: "taskcreate",

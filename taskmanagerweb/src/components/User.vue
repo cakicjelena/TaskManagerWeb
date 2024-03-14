@@ -13,7 +13,6 @@
         <h1 class="md-title">Users</h1>
       </md-table-toolbar>
       <md-table-row>
-        <md-table-head md-numeric>index</md-table-head>
         <md-table-head md-numeric>ID</md-table-head>
         <md-table-head md-numeric>First Name</md-table-head>
         <md-table-head md-numeric>Last Name</md-table-head>
@@ -22,8 +21,7 @@
         <md-table-head md-numeric>Birth Date</md-table-head>
         <md-table-head md-numeric>Admin</md-table-head>
       </md-table-row>
-      <md-table-row v-for="(user, index) in data" :key="user.id">
-        <md-table-cell md-numeric>{{ index }}</md-table-cell>
+      <md-table-row v-for="user in data" :key="user.id">
         <md-table-cell md-numeric>{{ user.id }}</md-table-cell>
         <md-table-cell md-numeric>{{ user.first_name }}</md-table-cell>
         <md-table-cell md-numeric>{{ user.last_name }}</md-table-cell>

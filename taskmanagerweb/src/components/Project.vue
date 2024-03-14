@@ -9,7 +9,7 @@
       ></md-tab>
       <md-tab
         id="tab-projectcreate"
-        md-label="Create new project"
+        md-label="New project"
         @click="createProject"
       ></md-tab>
       <md-tab
