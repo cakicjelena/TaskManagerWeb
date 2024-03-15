@@ -123,8 +123,7 @@ export default {
       const requestOptions = {
         method: "POST",
         headers: {
-          "Content-Type":
-            "multipart/form-data; boundary=<calculated when request is sent>",
+          "Content-Type": "application/json; charset=utf-8",
         },
         body: JSON.stringify(this.form),
       };

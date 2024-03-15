@@ -56,7 +56,7 @@
                 <label for="projectManagerId">Project Manager</label>
                 <md-select v-model="form.projectManagerId">
                   <md-option
-                    v-for="element in data"
+                    v-for="element in users"
                     v-bind:key="element.id"
                     :value="element.first_name"
                     >{{ element.email }}</md-option
@@ -73,6 +73,7 @@
           <md-button
             type="submit"
             class="md-raised md-primary"
+            @click="createproject"
             :disabled="sending"
             >Create project</md-button
           >
@@ -83,16 +84,21 @@
 </template>
 
 <script>
+//import format from "date-fns";
+//let dateFormat = this.$material.locale.dateFormat || "yyyy-MM-dd";
 export default {
   name: "ProjectCreate",
   data: () => ({
     form: {
       name: null,
-      createDate: null,
+      createDate: new Date(),
       deadlineDate: null,
       description: null,
       projectManagerId: null,
     },
+
+    users: null,
+    response: null,
 
     sending: false,
   }),
@@ -107,7 +113,7 @@ export default {
       requestOptions
     );
 
-    this.data = await response.json();
+    this.users = await response.json();
   },
   methods: {
     clearForm() {
@@ -124,6 +130,27 @@ export default {
       this.clearForm();
     },
     async gotoproject() {
+      this.$router.push({ path: "/projects" });
+    },
+    async createproject() {
+      this.form.createDate = this.form.createDate | dateParse("YYYY-MM-DD");
+      this.form.deadlineDate = this.form.createDate | dateParse("YYYY-MM-DD");
+      this.loading = true;
+      alert(this.form.name);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(this.form),
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/createproject/",
+        requestOptions
+      );
+
+      this.response = await response.json();
+      //this.loading = false;
       this.$router.push({ path: "/projects" });
     },
   },

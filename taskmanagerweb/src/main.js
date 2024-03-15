@@ -7,7 +7,9 @@ import router from "./router";
 import "vue-material/dist/vue-material.min.css";
 import "vue-material/dist/theme/default.css";
 import VueMaterial from "vue-material";
+import VueFilterDateParse from "@vuejs-community/vue-filter-date-parse";
 
+Vue.use(VueFilterDateParse);
 Vue.use(VueMaterial);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
