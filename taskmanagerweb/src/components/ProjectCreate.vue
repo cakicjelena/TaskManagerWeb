@@ -92,7 +92,6 @@ export default {
       deadlineDate: null,
       description: null,
       projectManagerId: null,
-      projectManagerEmail: null,
     },
 
     sending: false,

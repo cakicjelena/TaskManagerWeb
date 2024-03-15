@@ -46,7 +46,6 @@
                   md-dense
                   :disabled="sending"
                 >
-                  <md-option></md-option>
                   <md-option value="1">Male</md-option>
                   <md-option value="0">Female</md-option>
                 </md-select>
@@ -54,7 +53,7 @@
             </div>
 
             <div class="md-layout-item md-small-size-100">
-              <md-datepicker v-model="birthDate">
+              <md-datepicker v-model="form.birthDate">
                 <label>Birth Date</label>
               </md-datepicker>
             </div>
@@ -73,13 +72,13 @@
           </md-field>
           <md-field md-has-password>
             <label>Password</label>
-            <md-input v-model="password" type="password"></md-input>
+            <md-input v-model="form.password" type="password"></md-input>
           </md-field>
           <md-field md-has-password>
             <label>Confirm Password</label>
-            <md-input v-model="cpassword" type="password"></md-input>
+            <md-input v-model="form.cpassword" type="password"></md-input>
           </md-field>
-          <md-checkbox v-model="is_superuser">Admin</md-checkbox>
+          <md-checkbox v-model="form.is_superuser">Admin</md-checkbox>
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
@@ -89,6 +88,7 @@
             type="submit"
             class="md-raised md-primary"
             :disabled="sending"
+            @click="register"
             >Register</md-button
           >
         </md-card-actions>
@@ -115,6 +115,25 @@ export default {
   }),
 
   methods: {
+    async register() {
+      this.loading = true;
+      if (this.password != this.cpassword) {
+        alert("Passwords don't match!");
+      }
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "multipart/form-data; boundary=<calculated when request is sent>",
+        },
+        body: JSON.stringify(this.form),
+      };
+      const response = await fetch("http://127.0.0.1:8000/", requestOptions);
+
+      this.data = await response.json();
+      //this.loading = false;
+      this.$router.push({ path: "/home" });
+    },
     clearForm() {
       this.$v.$reset();
       this.form.first_name = null;

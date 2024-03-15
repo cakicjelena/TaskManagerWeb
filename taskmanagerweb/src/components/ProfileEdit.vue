@@ -48,11 +48,11 @@
           </md-field>
           <md-field md-has-password>
             <label>Password</label>
-            <md-input v-model="password" type="password"></md-input>
+            <md-input v-model="form.password" type="password"></md-input>
           </md-field>
           <md-field md-has-password>
             <label>Confirm Password</label>
-            <md-input v-model="cpassword" type="password"></md-input>
+            <md-input v-model="form.cpassword" type="password"></md-input>
           </md-field>
         </md-card-content>
 
@@ -115,17 +115,13 @@ export default {
     },
     async submit() {
       this.loading = true;
-
-      //alert(this.$cookies.get("csrftoken"));
-      this.bodyData = {
-        email: this.email,
-        password: this.password,
-      };
-      //alert(this.bodyData);
+      if (this.password != this.cpassword) {
+        alert("Passwords don't match!");
+      }
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify(this.bodyData),
+        body: JSON.stringify(this.form),
       };
       const response = await fetch(
         "http://127.0.0.1:8000/editprofile/" + this.$route.params.id,
@@ -133,19 +129,8 @@ export default {
       );
 
       this.data = await response.json();
-      this.$router.push({
-        name: "profile",
-        params: {
-          first_name: this.data["first_name"],
-          last_name: this.data["last_name"],
-          email: this.data["email"],
-          sex: this.data["sex"],
-          birthDate: this.data["birthDate"],
-          is_superuser: this.data["is_superuser"],
-        },
-      });
-
-      this.loading = false;
+      //this.loading = false;
+      this.$router.push({ path: "/profile" });
     },
   },
 };

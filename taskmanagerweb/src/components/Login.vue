@@ -63,7 +63,7 @@ export default {
         requestOptions
       );
       this.data = await response.json();
-      if (response.status == 400) alert("Wrong password");
+      if (response.status == 400) alert("Wrong email or password!");
       else {
         this.$router.push({
           name: "profile",
