@@ -9,10 +9,6 @@
       ></md-tab>
     </md-tabs>
     <md-table v-model="data" md-card @md-selected="onSelect">
-      <md-table-toolbar>
-        <h1 class="md-title">Selection Colors</h1>
-      </md-table-toolbar>
-
       <md-table-row
         slot="md-table-row"
         slot-scope="{ item }"
@@ -90,7 +86,7 @@ export default {
           requestOptions
         );
         this.response = await response.json();
-        this.$router.push({ path: "." });
+        this.$router.go();
       }
     },
     getClass: ({ id }) => ({

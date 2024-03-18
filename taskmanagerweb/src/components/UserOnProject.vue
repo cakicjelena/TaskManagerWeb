@@ -18,11 +18,11 @@
           <div class="md-layout-item">
             <md-field>
               <label for="projects">Project</label>
-              <md-select v-model="projects">
+              <md-select v-model="projectId">
                 <md-option
-                  v-for="element in this.projects"
+                  v-for="element in projects"
                   v-bind:key="element.id"
-                  :value="element.name"
+                  :value="element.id"
                   >{{ element.name }}</md-option
                 >
               </md-select>
@@ -31,11 +31,11 @@
           <div class="md-layout-item">
             <md-field>
               <label for="users">User</label>
-              <md-select v-model="users">
+              <md-select v-model="userId">
                 <md-option
-                  v-for="element in this.users"
+                  v-for="element in users"
                   v-bind:key="element.id"
-                  :value="element.first_name"
+                  :value="element.id"
                   >{{ element.email }}</md-option
                 >
               </md-select>
@@ -50,7 +50,7 @@
             type="submit"
             class="md-raised md-primary"
             :disabled="sending"
-            >Put user on project</md-button
+            >SUBMIT</md-button
           >
         </md-card-actions>
       </md-card>
@@ -64,6 +64,8 @@ export default {
   data: () => ({
     return: {
       data: null,
+      userId: null,
+      projectId: null,
       users: null,
       projects: null,
     },

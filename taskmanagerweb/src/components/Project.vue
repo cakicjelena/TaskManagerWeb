@@ -1,5 +1,5 @@
 <template>
-  <div class="proj">
+  <div>
     <md-tabs class="md-primary">
       <md-tab
         id="tab-profile"
@@ -18,29 +18,44 @@
         @click="putUserOnProject"
       ></md-tab>
     </md-tabs>
-    <md-table md-card>
-      <md-table-toolbar>
-        <h1 class="md-title">Projects</h1>
-      </md-table-toolbar>
-      <md-table-row>
-        <md-table-head md-numeric>ID</md-table-head>
-        <md-table-head md-numeric>Name</md-table-head>
-        <md-table-head md-numeric>Create Date</md-table-head>
-        <md-table-head md-numeric>Deadline Date</md-table-head>
-        <md-table-head md-numeric>Description</md-table-head>
-        <md-table-head md-numeric>Project Manager ID</md-table-head>
-      </md-table-row>
-      <md-table-row v-for="project in data" :key="project.id">
-        <md-table-cell md-numeric>{{ project.id }}</md-table-cell>
-        <md-table-cell md-numeric
-          ><a href="#" @click="goToTasks(project.id)">{{
-            project.name
-          }}</a></md-table-cell
+    <md-table v-model="data" md-card @md-selected="onSelect">
+      <md-table-row
+        slot="md-table-row"
+        slot-scope="{ item }"
+        :class="getClass(item)"
+        md-selectable="single"
+        @dblclick="goToTasks(item.id)"
+      >
+        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{
+          item.id
+        }}</md-table-cell>
+        <md-table-cell md-label="Name" md-sort-by="name" md-numeric>
+          {{ item.name }}</md-table-cell
         >
-        <md-table-cell md-numeric>{{ project.createDate }}</md-table-cell>
-        <md-table-cell md-numeric>{{ project.deadlineDate }}</md-table-cell>
-        <md-table-cell md-numeric>{{ project.description }}</md-table-cell>
-        <md-table-cell md-numeric>{{ project.projectManagerId }}</md-table-cell>
+        <md-table-cell
+          md-label="Create Date"
+          md-sort-by="createDate"
+          md-numeric
+          >{{ item.createDate }}</md-table-cell
+        >
+        <md-table-cell
+          md-label="Deadline Date"
+          md-sort-by="deadlineDate"
+          md-numeric
+          >{{ item.deadlineDate }}</md-table-cell
+        >
+        <md-table-cell
+          md-label="Description"
+          md-sort-by="description"
+          md-numeric
+          >{{ item.description }}</md-table-cell
+        >
+        <md-table-cell
+          md-label="Project Manager"
+          md-sort-by="projectManagerId"
+          md-numeric
+          >{{ findUserById(item.projectManagerId) }}</md-table-cell
+        >
       </md-table-row>
     </md-table>
 
@@ -60,6 +75,8 @@ export default {
   data() {
     return {
       data: null,
+      users: null,
+      deleteresponse: null,
     };
   },
   async mounted() {
@@ -72,14 +89,46 @@ export default {
       requestOptions
     );
     this.data = await response.json();
+
+    const requestOptionsU = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    const responseU = await fetch(
+      "http://127.0.0.1:8000/getallusers/",
+      requestOptionsU
+    );
+    this.users = await responseU.json();
   },
   name: "ProjectWidget",
   props: {
     msg: String,
   },
   methods: {
+    getClass: ({ id }) => ({
+      "md-primary": id === 2,
+      "md-accent": id === 3,
+    }),
+    onSelect(item) {
+      this.selected = item;
+    },
     async editProject() {},
-    async deleteProject() {},
+    async deleteProject() {
+      if (this.selected == null) {
+        alert("You must select project!");
+      } else {
+        const requestOptions = {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        };
+        const response = await fetch(
+          "http://127.0.0.1:8000/deleteproject/" + this.selected.id,
+          requestOptions
+        );
+        this.deleteresponse = await response.json();
+        this.$router.go();
+      }
+    },
     async createProject() {
       this.$router.push({ path: "/projectcreate" });
     },
@@ -92,6 +141,14 @@ export default {
     async gotoprofile() {
       this.$router.push({ path: "/profile" });
     },
+    findUserById(ID) {
+      for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i].id == ID) {
+          return this.users[i].email;
+        }
+      }
+      return null;
+    },
   },
 };
 </script>
@@ -99,8 +156,5 @@ export default {
 <style lang="scss">
 .buttonClass {
   margin: 10px;
-}
-.proj {
-  background-color: beige;
 }
 </style>
