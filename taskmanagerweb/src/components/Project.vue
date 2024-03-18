@@ -60,7 +60,7 @@
     </md-table>
 
     <b-form>
-      <b-button variant="info" @click="editProject" class="buttonClass"
+      <b-button variant="info" @click="editProjectButton" class="buttonClass"
         >EDIT PROJECT</b-button
       >
       <b-button variant="info" @click="deleteProject" class="buttonClass"
@@ -112,7 +112,20 @@ export default {
     onSelect(item) {
       this.selected = item;
     },
-    async editProject() {},
+    async editProjectButton() {
+      this.$router.push({
+        name: "projectedit",
+        params: {
+          id: this.selected.id,
+          name: this.selected.name,
+          createDate: this.selected.createDate,
+          deadlineDate: this.selected.deadlineDate,
+          description: this.selected.description,
+          projectManagerId: this.selected.projectManagerId,
+          users: this.users,
+        },
+      });
+    },
     async deleteProject() {
       if (this.selected == null) {
         alert("You must select project!");

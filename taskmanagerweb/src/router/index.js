@@ -13,6 +13,7 @@ import Home from "@/components/Home.vue";
 import TaskCreate from "@/components/TaskCreate.vue";
 import TaskDetails from "@/components/TaskDetails.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
+import ProjectEdit from "@/components/ProjectEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -50,6 +51,11 @@ const routes = [
     path: "/projectcreate",
     name: "projectcreate",
     component: ProjectCreate,
+  },
+  {
+    path: "/projectedit",
+    name: "projectedit",
+    component: ProjectEdit,
   },
   {
     path: "/useronproject",

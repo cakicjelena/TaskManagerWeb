@@ -108,11 +108,6 @@ export default {
       this.form.cpassword = null;
       this.form.is_superuser = null;
     },
-    saveUser() {
-      this.sending = true;
-
-      this.clearForm();
-    },
     async submit() {
       this.loading = true;
       if (this.password != this.cpassword) {
