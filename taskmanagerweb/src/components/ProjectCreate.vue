@@ -58,7 +58,7 @@
                   <md-option
                     v-for="element in users"
                     v-bind:key="element.id"
-                    :value="element.first_name"
+                    :value="element.id"
                     >{{ element.email }}</md-option
                   >
                 </md-select>
@@ -84,8 +84,7 @@
 </template>
 
 <script>
-//import format from "date-fns";
-//let dateFormat = this.$material.locale.dateFormat || "yyyy-MM-dd";
+import { convert } from "@/utilities";
 export default {
   name: "ProjectCreate",
   data: () => ({
@@ -133,10 +132,10 @@ export default {
       this.$router.push({ path: "/projects" });
     },
     async createproject() {
-      this.form.createDate = this.form.createDate | dateParse("YYYY-MM-DD");
-      this.form.deadlineDate = this.form.createDate | dateParse("YYYY-MM-DD");
+      this.form.createDate = convert(this.form.createDate);
+      this.form.deadlineDate = convert(this.form.deadlineDate);
       this.loading = true;
-      alert(this.form.name);
+
       const requestOptions = {
         method: "POST",
         headers: {

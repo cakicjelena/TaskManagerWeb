@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { convert } from "@/utilities";
 export default {
   name: "FormValidation",
   data: () => ({
@@ -116,6 +117,7 @@ export default {
 
   methods: {
     async register() {
+      this.form.birthDate = convert(this.form.birthDate);
       this.loading = true;
       if (this.password != this.cpassword) {
         alert("Passwords don't match!");
