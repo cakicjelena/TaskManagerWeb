@@ -28,8 +28,11 @@
             class="list-group-item"
             v-for="element in list1"
             :key="element.id"
+            @dblclick="gototaskdetails"
+            @click="take(element)"
+            :id="element.id"
           >
-            <a href="#" @click="gototaskdetails"> {{ element.name }} </a>
+            {{ element.name }}
           </div>
         </draggable>
       </div>
@@ -46,8 +49,11 @@
             class="list-group-item"
             v-for="element in list2"
             :key="element.id"
+            @dblclick="gototaskdetails"
+            @click="take(element)"
+            :id="element.id"
           >
-            <a href="#" @click="gototaskdetails"> {{ element.name }} </a>
+            {{ element.name }}
           </div>
         </draggable>
       </div>
@@ -64,17 +70,23 @@
             class="list-group-item"
             v-for="element in list3"
             :key="element.id"
+            @dblclick="gototaskdetails"
+            @click="take(element)"
+            :id="element.id"
           >
-            <a href="#" @click="gototaskdetails">
-              {{ element.name }}
-            </a>
+            {{ element.name }}
           </div>
         </draggable>
       </div>
     </div>
     <br />
     <br />
-    <b-button variant="info" @click="taskdelete">Delete task</b-button>
+    <b-button variant="info" @click="taskdelete" class="buttonClass"
+      >Delete task</b-button
+    >
+    <b-button variant="info" @click="taskedit" class="buttonClass"
+      >Edit task</b-button
+    >
   </div>
 </template>
 
@@ -97,9 +109,16 @@ export default {
       list1: [],
       list2: [],
       list3: [],
+      projectId: null,
+      selected: null,
+      clicked: false,
+      backColor: "white",
+      deleteresponse: null,
     };
   },
   async mounted() {
+    this.projectId = this.$route.query.id;
+
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -116,15 +135,37 @@ export default {
   },
   methods: {
     gototaskdetails() {
-      this.$router.push({ path: "/taskdetails" });
+      alert(this.selected.name);
+      this.$router.push({
+        path: "/taskdetails",
+      });
     },
     gotoprojects() {
       this.$router.push({ path: "/projects" });
     },
     gototaskcreate() {
-      this.$router.push({ path: "/taskcreate" });
+      this.$router.push({
+        path: "/taskcreate",
+        query: { projectId: this.projectId },
+      });
     },
-    taskdelete() {},
+    async taskdelete() {
+      if (this.selected == null) {
+        alert("You must select task!");
+      } else {
+        const requestOptions = {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        };
+        const response = await fetch(
+          "http://127.0.0.1:8000/deletetask/" + this.selected.id,
+          requestOptions
+        );
+        this.deleteresponse = await response.json();
+        this.$router.go();
+      }
+    },
+
     add: function () {
       this.list.push({ name: "Testing" });
     },
@@ -142,10 +183,48 @@ export default {
     initTasks: function () {
       for (let i = 0; i < this.data.length; i++) {
         if (this.data[i]["status"] == 1)
-          this.list1.push({ name: this.data[i]["name"] });
+          this.list1.push({
+            name: this.data[i]["name"],
+            id: this.data[i]["id"],
+            type: this.data[i]["type"],
+            status: this.data[i]["status"],
+            description: this.data[i]["description"],
+            startDate: this.data[i]["startDate"],
+            finishDate: this.data[i]["finishDate"],
+          });
         else if (this.data[i]["status"] == 2)
-          this.list2.push({ name: this.data[i]["name"] });
-        else this.list3.push({ name: this.data[i]["name"] });
+          this.list2.push({
+            name: this.data[i]["name"],
+            id: this.data[i]["id"],
+            type: this.data[i]["type"],
+            status: this.data[i]["status"],
+            description: this.data[i]["description"],
+            startDate: this.data[i]["startDate"],
+            finishDate: this.data[i]["finishDate"],
+          });
+        else
+          this.list3.push({
+            name: this.data[i]["name"],
+            id: this.data[i]["id"],
+            type: this.data[i]["type"],
+            status: this.data[i]["status"],
+            description: this.data[i]["description"],
+            startDate: this.data[i]["startDate"],
+            finishDate: this.data[i]["finishDate"],
+          });
+      }
+    },
+    take(task) {
+      var el = document.getElementById(task.id);
+      console.log(el);
+      if (this.clicked) {
+        this.selected = null;
+        this.clicked = false;
+        el.style = "background-color': white";
+      } else {
+        this.selected = task;
+        this.clicked = true;
+        el.style = "background-color:#ddcef0";
       }
     },
   },
@@ -155,5 +234,14 @@ export default {
 <style>
 .row {
   justify-content: center;
+}
+.buttonClass {
+  margin: 10px;
+}
+.refClass {
+  background-color: darkgray;
+}
+#chose {
+  background-color: aqua;
 }
 </style>

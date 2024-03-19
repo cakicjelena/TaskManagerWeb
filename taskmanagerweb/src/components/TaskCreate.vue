@@ -1,13 +1,5 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
-      <md-tab
-        id="tab-task"
-        md-label="Tasks"
-        name="Tasks"
-        v-on:click="gototasks"
-      ></md-tab>
-    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -53,25 +45,32 @@
 
             <div class="md-layout-item">
               <md-field>
-                <label for="projectManagerId">Type</label>
+                <label for="type">Type</label>
                 <md-select v-model="form.type">
-                  <md-option
-                    v-for="element in data"
-                    v-bind:key="element.id"
-                    :value="element.first_name"
-                    >{{ element.email }}</md-option
-                  >
+                  <md-option value="1">Ordinary</md-option>
+                  <md-option value="2">Bug</md-option>
+                  <md-option value="3">Urgent</md-option>
                 </md-select>
               </md-field>
             </div>
             <div class="md-layout-item">
               <md-field>
-                <label for="projectManagerId">Status</label>
+                <label for="status">Status</label>
                 <md-select v-model="form.status">
+                  <md-option value="1">To Do</md-option>
+                  <md-option value="2">In Progress</md-option>
+                  <md-option value="3">Done</md-option>
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item">
+              <md-field>
+                <label for="user">User</label>
+                <md-select v-model="form.userId">
                   <md-option
-                    v-for="element in data"
+                    v-for="element in users"
                     v-bind:key="element.id"
-                    :value="element.first_name"
+                    :value="element.id"
                     >{{ element.email }}</md-option
                   >
                 </md-select>
@@ -87,7 +86,8 @@
             type="submit"
             class="md-raised md-primary"
             :disabled="sending"
-            >Create task</md-button
+            @click="submit"
+            >SUBMIT</md-button
           >
         </md-card-actions>
       </md-card>
@@ -96,17 +96,21 @@
 </template>
 
 <script>
+import { convert } from "@/utilities";
 export default {
   name: "TaskCreate",
   data: () => ({
     form: {
       name: null,
-      startDate: null,
+      startDate: new Date(),
       finishDate: null,
       description: null,
       status: null,
       type: null,
+      userId: null,
+      projectId: null,
     },
+    users: null,
 
     sending: false,
   }),
@@ -121,9 +125,31 @@ export default {
       requestOptions
     );
 
-    this.data = await response.json();
+    this.users = await response.json();
   },
   methods: {
+    async submit() {
+      this.form.startDate = convert(this.form.startDate);
+      this.form.finishDate = convert(this.form.finishDate);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(this.form),
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/createtask/" +
+          this.$route.query.projectId +
+          "/" +
+          this.form.userId,
+        requestOptions
+      );
+
+      this.response = await response.json();
+      //this.loading = false;
+      this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
+    },
     clearForm() {
       this.$v.$reset();
       this.form.name = null;

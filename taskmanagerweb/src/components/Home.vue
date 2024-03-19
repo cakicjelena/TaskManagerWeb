@@ -2,10 +2,7 @@
   <md-content class="md-content">
     <md-card class="home-card">
       <md-card-media>
-        <img
-          class="img"
-          src="https://static.vecteezy.com/system/resources/previews/028/749/995/non_2x/task-manager-icon-vector.jpg"
-        />
+        <img class="img" src="../../public/logo.jpg" />
       </md-card-media>
       <md-card-header>
         <div class="md-title">Task Manager</div>

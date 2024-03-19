@@ -66,7 +66,7 @@ export default {
       data: null,
       userId: null,
       projectId: null,
-      users: [{ id: 1, email: "bla" }],
+      users: null,
       projects: null,
     },
 

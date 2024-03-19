@@ -2,9 +2,7 @@
   <div class="centered-container">
     <md-content class="md-elevation-3">
       <div class="title">
-        <img
-          src="https://static.vecteezy.com/system/resources/previews/028/749/995/non_2x/task-manager-icon-vector.jpg"
-        />
+        <img src="../../public/logo.jpg" />
         <div class="md-title">Task Manager</div>
       </div>
       <div class="form">

@@ -1,13 +1,5 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
-      <md-tab
-        id="tab-project"
-        md-label="Projects"
-        name="Projects"
-        v-on:click="gotoproject"
-      ></md-tab>
-    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -127,9 +119,6 @@ export default {
       this.sending = true;
 
       this.clearForm();
-    },
-    async gotoproject() {
-      this.$router.push({ path: "/projects" });
     },
     async createproject() {
       this.form.createDate = convert(this.form.createDate);

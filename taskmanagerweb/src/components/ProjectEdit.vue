@@ -32,7 +32,7 @@
                 <md-option
                   v-for="element in users"
                   v-bind:key="element.id"
-                  :value="element.id"
+                  :value="element.email"
                   >{{ element.email }}</md-option
                 >
               </md-select>
@@ -82,11 +82,11 @@ export default {
   },
   methods: {
     async projectedit() {
-      //deadline date not null???
       this.form.deadlineDate = convert(this.form.deadlineDate);
       this.form.projectManagerId = this.getIdByEmail(
         this.form.projectManagerId
       );
+      alert(this.form.projectManagerId);
       this.loading = true;
       const requestOptions = {
         method: "POST",

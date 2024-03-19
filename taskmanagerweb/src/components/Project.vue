@@ -149,7 +149,10 @@ export default {
       this.$router.push({ path: "/useronproject" });
     },
     async goToTasks(ID) {
-      this.$router.push({ path: "/tasks/", query: { id: ID } });
+      this.$router.push({
+        path: "/tasks/",
+        query: { id: ID },
+      });
     },
     async gotoprofile() {
       this.$router.push({ path: "/profile" });
