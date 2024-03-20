@@ -12,6 +12,7 @@ import UserOnProject from "@/components/UserOnProject.vue";
 import Home from "@/components/Home.vue";
 import TaskCreate from "@/components/TaskCreate.vue";
 import TaskDetails from "@/components/TaskDetails.vue";
+import TaskEdit from "@/components/TaskEdit.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import ProjectEdit from "@/components/ProjectEdit.vue";
 
@@ -92,6 +93,11 @@ const routes = [
     path: "/taskcreate",
     name: "taskcreate",
     component: TaskCreate,
+  },
+  {
+    path: "/taskedit",
+    name: "taskedit",
+    component: TaskEdit,
   },
   {
     path: "/users",

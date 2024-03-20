@@ -18,7 +18,7 @@
           <div class="md-layout-item">
             <md-field>
               <label for="projects">Project</label>
-              <md-select v-model="projectId">
+              <md-select v-model="form.project_id">
                 <md-option
                   v-for="element in projects"
                   v-bind:key="element.id"
@@ -31,7 +31,7 @@
           <div class="md-layout-item">
             <md-field>
               <label for="users">User</label>
-              <md-select v-model="userId">
+              <md-select v-model="form.user_id">
                 <md-option
                   v-for="element in users"
                   v-bind:key="element.id"
@@ -50,6 +50,7 @@
             type="submit"
             class="md-raised md-primary"
             :disabled="sending"
+            @click="put"
             >SUBMIT</md-button
           >
         </md-card-actions>
@@ -62,13 +63,13 @@
 export default {
   name: "UserOnProject",
   data: () => ({
-    return: {
-      data: null,
-      userId: null,
-      projectId: null,
-      users: null,
-      projects: null,
+    form: {
+      user_id: null,
+      project_id: null,
     },
+    data: null,
+    users: null,
+    projects: null,
 
     sending: false,
   }),
@@ -98,10 +99,27 @@ export default {
     this.projects = await responseP.json();
   },
   methods: {
-    saveUser() {
-      this.sending = true;
-    },
     async gotoproject() {
+      this.$router.push({ path: "/projects" });
+    },
+    async put() {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(this.form),
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/createuseronproject/" +
+          this.form.user_id +
+          "/" +
+          this.form.project_id,
+        requestOptions
+      );
+
+      this.response = await response.json();
+      //this.loading = false;
       this.$router.push({ path: "/projects" });
     },
   },

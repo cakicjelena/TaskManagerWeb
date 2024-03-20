@@ -28,7 +28,7 @@
             class="list-group-item"
             v-for="element in list1"
             :key="element.id"
-            @dblclick="gototaskdetails"
+            @dblclick="gototaskdetails(element)"
             @click="take(element)"
             :id="element.id"
           >
@@ -49,7 +49,7 @@
             class="list-group-item"
             v-for="element in list2"
             :key="element.id"
-            @dblclick="gototaskdetails"
+            @dblclick="gototaskdetails(element)"
             @click="take(element)"
             :id="element.id"
           >
@@ -70,7 +70,7 @@
             class="list-group-item"
             v-for="element in list3"
             :key="element.id"
-            @dblclick="gototaskdetails"
+            @dblclick="gototaskdetails(element)"
             @click="take(element)"
             :id="element.id"
           >
@@ -83,9 +83,6 @@
     <br />
     <b-button variant="info" @click="taskdelete" class="buttonClass"
       >Delete task</b-button
-    >
-    <b-button variant="info" @click="taskedit" class="buttonClass"
-      >Edit task</b-button
     >
   </div>
 </template>
@@ -114,6 +111,7 @@ export default {
       clicked: false,
       backColor: "white",
       deleteresponse: null,
+      userId: null,
     };
   },
   async mounted() {
@@ -134,10 +132,19 @@ export default {
     // alert(this.data);
   },
   methods: {
-    gototaskdetails() {
-      alert(this.selected.name);
+    gototaskdetails(task) {
       this.$router.push({
-        path: "/taskdetails",
+        name: "taskdetails",
+        query: {
+          name: task.name,
+          id: task.id,
+          type: task.type,
+          description: task.description,
+          status: task.status,
+          startDate: task.startDate,
+          finishDate: task.finishDate,
+          userId: task.user,
+        },
       });
     },
     gotoprojects() {
@@ -191,6 +198,7 @@ export default {
             description: this.data[i]["description"],
             startDate: this.data[i]["startDate"],
             finishDate: this.data[i]["finishDate"],
+            user: this.data[i]["user"],
           });
         else if (this.data[i]["status"] == 2)
           this.list2.push({
@@ -201,6 +209,7 @@ export default {
             description: this.data[i]["description"],
             startDate: this.data[i]["startDate"],
             finishDate: this.data[i]["finishDate"],
+            user: this.data[i]["user"],
           });
         else
           this.list3.push({
@@ -211,6 +220,7 @@ export default {
             description: this.data[i]["description"],
             startDate: this.data[i]["startDate"],
             finishDate: this.data[i]["finishDate"],
+            user: this.data[i]["user"],
           });
       }
     },

@@ -56,6 +56,16 @@
           md-numeric
           >{{ findUserById(item.projectManagerId) }}</md-table-cell
         >
+        <md-table-cell md-label="Users"
+          ><md-select
+            ><md-option
+              v-for="element in item.users"
+              v-bind:key="element.id"
+              :value="element.id"
+              >{{ element.email }}</md-option
+            >
+          </md-select>
+        </md-table-cell>
       </md-table-row>
     </md-table>
 
@@ -77,6 +87,7 @@ export default {
       data: null,
       users: null,
       deleteresponse: null,
+      usersOnProject: null,
     };
   },
   async mounted() {
