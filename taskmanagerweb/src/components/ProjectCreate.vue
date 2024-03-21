@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import { store } from "@/store";
 import { convert } from "@/utilities";
 export default {
   name: "ProjectCreate",
@@ -94,17 +95,20 @@ export default {
     sending: false,
   }),
   async mounted() {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    const response = await fetch(
-      "http://127.0.0.1:8000/getallusers/",
-      requestOptions
-    );
-
-    this.users = await response.json();
+    if (store.allUsers == null) {
+      const requestOptionsU = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const responseU = await fetch(
+        "http://127.0.0.1:8000/getallusers/",
+        requestOptionsU
+      );
+      this.users = await responseU.json();
+      store.allUsers = this.users;
+    } else {
+      this.users = store.allUsers;
+    }
   },
   methods: {
     clearForm() {

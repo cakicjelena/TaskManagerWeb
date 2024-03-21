@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { store } from "@/store";
 import { convert } from "@/utilities";
 export default {
   name: "taskedit",
@@ -81,27 +82,32 @@ export default {
     users: null,
     sending: false,
     data: null,
+    store,
   }),
   async mounted() {
-    this.form.name = this.$route.query.name;
-    this.form.finishDate = this.$route.query.finishDate;
-    this.form.description = this.$route.query.description;
-    this.form.user = this.$route.query.user;
+    this.form.name = store.task.name;
+    this.form.finishDate = store.task.finishDate;
+    this.form.description = store.task.description;
+    this.form.user = store.task.user;
 
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    const response = await fetch(
-      "http://127.0.0.1:8000/getallusers/",
-      requestOptions
-    );
-
-    this.users = await response.json();
+    if (store.allUsers == null) {
+      const requestOptionsU = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const responseU = await fetch(
+        "http://127.0.0.1:8000/getallusers/",
+        requestOptionsU
+      );
+      this.users = await responseU.json();
+      store.allUsers = this.users;
+    } else {
+      this.users = store.allUsers;
+    }
   },
   methods: {
     async taskedit() {
+      this.form.user = this.getIdByEmail(this.form.user);
       this.form.finishDate = convert(this.form.finishDate);
       alert(this.form.user);
       this.loading = true;
@@ -111,7 +117,7 @@ export default {
         body: JSON.stringify(this.form),
       };
       const response = await fetch(
-        "http://127.0.0.1:8000/edittask/" + this.$route.query.id,
+        "http://127.0.0.1:8000/edittask/" + store.task.id,
         requestOptions
       );
 

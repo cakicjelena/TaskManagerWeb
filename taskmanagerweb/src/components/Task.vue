@@ -89,7 +89,7 @@
 
 <script>
 import draggable from "vuedraggable";
-
+import { store } from "@/store";
 export default {
   name: "three-lists",
   display: "Three Lists",
@@ -115,7 +115,7 @@ export default {
     };
   },
   async mounted() {
-    this.projectId = this.$route.query.id;
+    this.projectId = store.project.id;
 
     const requestOptions = {
       method: "GET",
@@ -123,28 +123,25 @@ export default {
     };
 
     const response = await fetch(
-      "http://127.0.0.1:8000/getalltasksofproject/" + this.$route.query.id,
+      "http://127.0.0.1:8000/getalltasksofproject/" + store.project.id,
       requestOptions
     );
 
     this.data = await response.json();
     this.initTasks();
-    // alert(this.data);
   },
   methods: {
     gototaskdetails(task) {
+      store.task.id = task.id;
+      store.task.name = task.name;
+      store.task.type = task.type;
+      store.task.status = task.status;
+      store.task.description = task.description;
+      store.task.startDate = task.startDate;
+      store.task.finishDate = task.finishDate;
+      store.task.userTask = task.user;
       this.$router.push({
         name: "taskdetails",
-        query: {
-          name: task.name,
-          id: task.id,
-          type: task.type,
-          description: task.description,
-          status: task.status,
-          startDate: task.startDate,
-          finishDate: task.finishDate,
-          userId: task.user,
-        },
       });
     },
     gotoprojects() {
@@ -185,7 +182,7 @@ export default {
       };
     },
     log: function (evt) {
-      alert(evt);
+      console.log(evt);
     },
     initTasks: function () {
       for (let i = 0; i < this.data.length; i++) {
@@ -225,6 +222,15 @@ export default {
       }
     },
     take(task) {
+      store.task.id = task.id;
+      store.task.name = task.name;
+      store.task.type = task.type;
+      store.task.status = task.status;
+      store.task.description = task.description;
+      store.task.startDate = task.startDate;
+      store.task.finishDate = task.finishDate;
+      store.task.userTask = task.user;
+
       var el = document.getElementById(task.id);
       console.log(el);
       if (this.clicked) {

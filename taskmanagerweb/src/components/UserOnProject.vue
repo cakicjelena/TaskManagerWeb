@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { store } from "@/store";
+
 export default {
   name: "UserOnProject",
   data: () => ({
@@ -74,29 +76,38 @@ export default {
     sending: false,
   }),
   async mounted() {
-    const requestOptionsU = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
+    if (store.allUsers == null) {
+      const requestOptionsU = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
 
-    const responseU = await fetch(
-      "http://127.0.0.1:8000/getallusers/",
-      requestOptionsU
-    );
+      const responseU = await fetch(
+        "http://127.0.0.1:8000/getallusers/",
+        requestOptionsU
+      );
 
-    this.users = await responseU.json();
+      this.users = await responseU.json();
+      store.allUsers = this.users;
+    } else {
+      this.users = store.allUsers;
+    }
+    if (store.allProjects == null) {
+      const requestOptionsP = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
 
-    const requestOptionsP = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
+      const responseP = await fetch(
+        "http://127.0.0.1:8000/getallprojects/",
+        requestOptionsP
+      );
 
-    const responseP = await fetch(
-      "http://127.0.0.1:8000/getallprojects/",
-      requestOptionsP
-    );
-
-    this.projects = await responseP.json();
+      this.projects = await responseP.json();
+      store.allProjects = this.projects;
+    } else {
+      this.projects = store.allProjects;
+    }
   },
   methods: {
     async gotoproject() {

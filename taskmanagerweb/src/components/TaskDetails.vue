@@ -15,16 +15,14 @@
         </md-table-toolbar>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Name: {{ this.$route.query.name }}</md-table-cell
+            >Name: {{ store.task.name }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
-          <md-table-cell class="profile-cell" v-if="this.$route.query.type == 1"
+          <md-table-cell class="profile-cell" v-if="store.task.type == 1"
             >Type: Ordinary
           </md-table-cell>
-          <md-table-cell
-            class="profile-cell"
-            v-else-if="this.$route.query.type == 2"
+          <md-table-cell class="profile-cell" v-else-if="store.task.type == 2"
             >Type: Bug
           </md-table-cell>
           <md-table-cell class="profile-cell" v-else
@@ -32,14 +30,10 @@
           </md-table-cell>
         </md-table-row>
         <md-table-row>
-          <md-table-cell
-            class="profile-cell"
-            v-if="this.$route.query.status == 1"
+          <md-table-cell class="profile-cell" v-if="store.task.status == 1"
             >Status: To Do</md-table-cell
           >
-          <md-table-cell
-            class="profile-cell"
-            v-else-if="this.$route.query.status == 2"
+          <md-table-cell class="profile-cell" v-else-if="store.task.status == 2"
             >Status: In Progress</md-table-cell
           >
           <md-table-cell class="profile-cell" v-else
@@ -48,22 +42,22 @@
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Description: {{ this.$route.query.description }}</md-table-cell
+            >Description: {{ store.task.description }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Start date: {{ this.$route.query.startDate }}</md-table-cell
+            >Start date: {{ store.task.startDate }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Finish Date: {{ this.$route.query.finishDate }}</md-table-cell
+            >Finish Date: {{ store.task.finishDate }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >User: {{ findUserById(this.$route.query.userId) }}</md-table-cell
+            >User: {{ findUserById(store.task.userTask) }}</md-table-cell
           >
         </md-table-row>
       </md-table>
@@ -102,6 +96,8 @@
 </template>
 
 <script>
+import { store } from "@/store";
+
 export default {
   name: "TaskDetails",
 
@@ -118,15 +114,17 @@ export default {
     return {
       data: null,
       comments: null,
-      taskId: this.$route.query.id,
-      taskname: this.$route.query.name,
+      taskId: store.task.id,
+      taskname: store.task.name,
       tasktype: null,
       taskstatus: null,
-      taskdescription: this.$route.query.description,
+      taskdescription: store.task.description,
       taskstartDate: null,
-      taskfinishDate: this.$route.query.finishDate,
-      userId: this.$route.query.userId,
+      taskfinishDate: store.task.finishDate,
+      userId: store.task.userTask,
       users: null,
+      store,
+      response: null,
     };
   },
   async mounted() {
@@ -135,20 +133,24 @@ export default {
       headers: { "Content-Type": "application/json" },
     };
     const response = await fetch(
-      "http://127.0.0.1:8000/getallcommentsoftask/" + this.$route.query.id,
+      "http://127.0.0.1:8000/getallcommentsoftask/" + store.task.id,
       requestOptions
     );
     this.comments = await response.json();
-
-    const requestOptionsU = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    const responseU = await fetch(
-      "http://127.0.0.1:8000/getallusers/",
-      requestOptionsU
-    );
-    this.users = await responseU.json();
+    if (store.allUsers == null) {
+      const requestOptionsU = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const responseU = await fetch(
+        "http://127.0.0.1:8000/getallusers/",
+        requestOptionsU
+      );
+      this.users = await responseU.json();
+      store.allUsers = this.users;
+    } else {
+      this.users = store.allUsers;
+    }
   },
   methods: {
     async gototasks() {
@@ -173,6 +175,26 @@ export default {
         }
       }
       return null;
+    },
+    async leaveComment() {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({ comment: this.comment }),
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/createcommentontask/" +
+          store.user.id +
+          "/" +
+          store.task.id,
+        requestOptions
+      );
+
+      this.response = await response.json();
+      //this.loading = false;
+      //this.$router.go();
     },
   },
 };

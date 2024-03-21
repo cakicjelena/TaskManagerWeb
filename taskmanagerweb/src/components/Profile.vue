@@ -20,21 +20,21 @@
       </md-table-toolbar>
       <md-table-row>
         <md-table-cell class="profile-cell"
-          >First name: {{ $route.params.first_name }}</md-table-cell
+          >First name: {{ store.user.first_name }}</md-table-cell
         >
       </md-table-row>
       <md-table-row>
         <md-table-cell class="profile-cell"
-          >Last name: {{ $route.params.last_name }}</md-table-cell
+          >Last name: {{ store.user.last_name }}</md-table-cell
         >
       </md-table-row>
       <md-table-row>
         <md-table-cell class="profile-cell"
-          >Email: {{ $route.params.email }}</md-table-cell
+          >Email: {{ store.user.email }}</md-table-cell
         >
       </md-table-row>
       <md-table-row>
-        <md-table-cell class="profile-cell" v-if="$route.params.sex">
+        <md-table-cell class="profile-cell" v-if="store.user.sex">
           Gender: Male</md-table-cell
         >
         <md-table-cell class="profile-cell" v-else>
@@ -43,12 +43,12 @@
       </md-table-row>
       <md-table-row>
         <md-table-cell class="profile-cell"
-          >Birth date: {{ $route.params.birthDate }}</md-table-cell
+          >Birth date: {{ store.user.birthDate }}</md-table-cell
         >
       </md-table-row>
       <md-table-row>
         <md-table-cell class="profile-cell"
-          >Admin: {{ $route.params.is_superuser }}</md-table-cell
+          >Admin: {{ store.user.is_superuser }}</md-table-cell
         >
       </md-table-row>
     </md-table>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-//import BarWidget from "@/components/Bar.vue";
+import { store } from "@/store";
 export default {
   name: "ProfileWidget",
 
@@ -80,10 +80,36 @@ export default {
   data() {
     return {
       data: null,
+      store,
     };
+  },
+
+  created() {
+    if (
+      store.user.id == null &&
+      store.user.first_name == null &&
+      store.user.last_name == null &&
+      store.user.email == null &&
+      store.user.sex == null &&
+      store.user.birthDate == null &&
+      store.user.is_superuser == null
+    ) {
+      store.user.id = this.$route.params.id;
+      store.user.first_name = this.$route.params.first_name;
+      store.user.last_name = this.$route.params.last_name;
+      store.user.email = this.$route.params.email;
+      store.user.sex = this.$route.params.sex;
+      store.user.birthDate = this.$route.params.birthDate;
+      store.user.is_superuser = this.$route.params.is_superuser;
+    }
   },
   methods: {
     async logout() {
+      store.user = null;
+      store.project = null;
+      store.task = null;
+      store.allProjects = null;
+      store.allUsers = null;
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,7 +119,7 @@ export default {
         requestOptions
       );
       this.data = await response.json();
-      this.$router.push({ name: "login" });
+      this.$router.push({ path: "/" });
     },
     async editprofile() {
       this.$router.push({
@@ -112,7 +138,7 @@ export default {
       });
     },
     async gotoprojects() {
-      this.$router.push({ path: "/projects" });
+      this.$router.push({ name: "projects" });
     },
     async gotousers() {
       this.$router.push({ path: "/users" });

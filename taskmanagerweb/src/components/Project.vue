@@ -24,7 +24,7 @@
         slot-scope="{ item }"
         :class="getClass(item)"
         md-selectable="single"
-        @dblclick="goToTasks(item.id)"
+        @dblclick="goToTasks()"
       >
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{
           item.id
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import { store } from "@/store";
 export default {
   data() {
     return {
@@ -88,28 +89,39 @@ export default {
       users: null,
       deleteresponse: null,
       usersOnProject: null,
+      store,
     };
   },
-  async mounted() {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    const response = await fetch(
-      "http://127.0.0.1:8000/getallprojects/",
-      requestOptions
-    );
-    this.data = await response.json();
+  async created() {
+    if (store.allProjects == null) {
+      const requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/getallprojects/",
+        requestOptions
+      );
+      this.data = await response.json();
+      store.allProjects = this.data;
+    } else {
+      this.data = store.allProjects;
+    }
 
-    const requestOptionsU = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    const responseU = await fetch(
-      "http://127.0.0.1:8000/getallusers/",
-      requestOptionsU
-    );
-    this.users = await responseU.json();
+    if (store.allUsers == null) {
+      const requestOptionsU = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const responseU = await fetch(
+        "http://127.0.0.1:8000/getallusers/",
+        requestOptionsU
+      );
+      this.users = await responseU.json();
+      store.allUsers = this.users;
+    } else {
+      this.users = store.allUsers;
+    }
   },
   name: "ProjectWidget",
   props: {
@@ -122,6 +134,13 @@ export default {
     }),
     onSelect(item) {
       this.selected = item;
+      store.project.id = this.selected.id;
+      store.project.name = this.selected.name;
+      store.project.createDate = this.selected.createDate;
+      store.project.deadlineDate = this.selected.deadlineDate;
+      store.project.description = this.selected.description;
+      store.project.projectManagerId = this.selected.projectManagerId;
+      store.project.users = this.users;
     },
     async editProjectButton() {
       this.$router.push({
@@ -159,10 +178,9 @@ export default {
     async putUserOnProject() {
       this.$router.push({ path: "/useronproject" });
     },
-    async goToTasks(ID) {
+    goToTasks() {
       this.$router.push({
         path: "/tasks/",
-        query: { id: ID },
       });
     },
     async gotoprofile() {

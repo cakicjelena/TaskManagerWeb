@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { store } from "@/store";
 export default {
   name: "UserWidget",
   props: {
@@ -56,18 +57,24 @@ export default {
       selected: null,
       data: null,
       response: null,
+      store,
     };
   },
   async mounted() {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    const response = await fetch(
-      "http://127.0.0.1:8000/getallusers/",
-      requestOptions
-    );
-    this.data = await response.json();
+    if (store.allUsers == null) {
+      const requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/getallusers/",
+        requestOptions
+      );
+      this.data = await response.json();
+      store.allUsers = this.data;
+    } else {
+      this.data = store.allUsers;
+    }
   },
   methods: {
     gotoprofile() {
