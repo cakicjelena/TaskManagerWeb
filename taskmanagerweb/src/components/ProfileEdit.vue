@@ -118,7 +118,7 @@ export default {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify(this.form),
       };
-      const response = fetch(
+      const response = await fetch(
         "http://127.0.0.1:8000/editprofile/" + this.$session.get("id"),
         requestOptions
       );
