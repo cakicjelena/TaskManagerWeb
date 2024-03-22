@@ -73,12 +73,12 @@ export default {
     data: null,
   }),
   async mounted() {
-    this.form.name = this.$route.params.name;
-    this.form.createDate = this.$route.params.createDate;
-    this.form.deadlineDate = this.$route.params.deadlineDate;
-    this.form.description = this.$route.params.description;
-    this.form.projectManagerId = this.$route.params.projectManagerId;
-    this.users = this.$route.params.users;
+    this.form.name = this.$session.get("name");
+    this.form.createDate = this.$session.get("createDate");
+    this.form.deadlineDate = this.$session.get("deadlineDate");
+    this.form.description = this.$session.get("description");
+    this.form.projectManagerId = this.$session.get("projectManagerId");
+    this.users = this.$session.get("users");
   },
   methods: {
     async projectedit() {
@@ -94,7 +94,7 @@ export default {
         body: JSON.stringify(this.form),
       };
       const response = await fetch(
-        "http://127.0.0.1:8000/editproject/" + this.$route.params.id,
+        "http://127.0.0.1:8000/editproject/" + this.$session.get("projectid"),
         requestOptions
       );
 

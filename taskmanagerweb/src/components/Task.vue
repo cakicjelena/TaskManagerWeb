@@ -22,7 +22,7 @@
           class="list-group"
           :list="this.list1"
           group="tasks"
-          @change="log"
+          @change="log1"
         >
           <div
             class="list-group-item"
@@ -43,7 +43,7 @@
           class="list-group"
           :list="this.list2"
           group="tasks"
-          @change="log"
+          @change="log2"
         >
           <div
             class="list-group-item"
@@ -64,7 +64,7 @@
           class="list-group"
           :list="this.list3"
           group="tasks"
-          @change="log"
+          @change="log3"
         >
           <div
             class="list-group-item"
@@ -89,7 +89,6 @@
 
 <script>
 import draggable from "vuedraggable";
-import { store } from "@/store";
 export default {
   name: "three-lists",
   display: "Three Lists",
@@ -112,18 +111,19 @@ export default {
       backColor: "white",
       deleteresponse: null,
       userId: null,
+      changeresponse: null,
     };
   },
   async mounted() {
-    this.projectId = store.project.id;
-
+    this.projectId = this.$store.project.id;
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
 
     const response = await fetch(
-      "http://127.0.0.1:8000/getalltasksofproject/" + store.project.id,
+      "http://127.0.0.1:8000/getalltasksofproject/" +
+        this.$session.get("projectid"),
       requestOptions
     );
 
@@ -132,14 +132,14 @@ export default {
   },
   methods: {
     gototaskdetails(task) {
-      store.task.id = task.id;
-      store.task.name = task.name;
-      store.task.type = task.type;
-      store.task.status = task.status;
-      store.task.description = task.description;
-      store.task.startDate = task.startDate;
-      store.task.finishDate = task.finishDate;
-      store.task.userTask = task.user;
+      this.$store.task.id = task.id;
+      this.$store.task.name = task.name;
+      this.$store.task.type = task.type;
+      this.$store.task.status = task.status;
+      this.$store.task.description = task.description;
+      this.$store.task.startDate = task.startDate;
+      this.$store.task.finishDate = task.finishDate;
+      this.$store.task.userTask = task.user;
       this.$router.push({
         name: "taskdetails",
       });
@@ -181,8 +181,39 @@ export default {
         name: e1.name + "cloned",
       };
     },
-    log: function (evt) {
+    log1: function (evt) {
+      console.log("1");
+      if (evt.added != null) {
+        this.changeTaskStatus(evt.added.element.id, 1);
+      }
       console.log(evt);
+    },
+    log2: function (evt) {
+      console.log("2");
+      if (evt.added != null) {
+        this.changeTaskStatus(evt.added.element.id, 2);
+      }
+      console.log(evt);
+    },
+    log3: function (evt) {
+      console.log("3");
+      if (evt.added != null) {
+        this.changeTaskStatus(evt.added.element.id, 3);
+      }
+      console.log(evt);
+    },
+    changeTaskStatus: async function (taskId, taskStatus) {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ status: taskStatus }),
+      };
+      const response = await fetch(
+        "http://127.0.0.1:8000/changetaskstatus/" + taskId,
+        requestOptions
+      );
+
+      this.changeresponse = await response.json();
     },
     initTasks: function () {
       for (let i = 0; i < this.data.length; i++) {
@@ -222,14 +253,14 @@ export default {
       }
     },
     take(task) {
-      store.task.id = task.id;
-      store.task.name = task.name;
-      store.task.type = task.type;
-      store.task.status = task.status;
-      store.task.description = task.description;
-      store.task.startDate = task.startDate;
-      store.task.finishDate = task.finishDate;
-      store.task.userTask = task.user;
+      this.$store.task.id = task.id;
+      this.$store.task.name = task.name;
+      this.$store.task.type = task.type;
+      this.$store.task.status = task.status;
+      this.$store.task.description = task.description;
+      this.$store.task.startDate = task.startDate;
+      this.$store.task.finishDate = task.finishDate;
+      this.$store.task.userTask = task.user;
 
       var el = document.getElementById(task.id);
       console.log(el);

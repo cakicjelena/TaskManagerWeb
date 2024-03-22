@@ -1,17 +1,19 @@
 <template>
-  <md-content class="md-content">
-    <md-card class="home-card">
-      <md-card-media>
-        <img class="img" src="../../public/logo.jpg" />
-      </md-card-media>
-      <md-card-header>
-        <div class="md-title">Task Manager</div>
-      </md-card-header>
-      <md-card-content>
-        <p>Task Manager is an application for project task management</p>
-      </md-card-content>
-    </md-card>
-  </md-content>
+  <div>
+    <md-content class="md-content">
+      <md-card class="home-card">
+        <md-card-media>
+          <img class="img" src="../../public/logo.jpg" />
+        </md-card-media>
+        <md-card-header>
+          <div class="md-title">Task Manager</div>
+        </md-card-header>
+        <md-card-content>
+          <p>Task Manager is an application for project task management</p>
+        </md-card-content>
+      </md-card>
+    </md-content>
+  </div>
 </template>
 
 <script>

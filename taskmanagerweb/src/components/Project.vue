@@ -81,7 +81,6 @@
 </template>
 
 <script>
-import { store } from "@/store";
 export default {
   data() {
     return {
@@ -89,11 +88,10 @@ export default {
       users: null,
       deleteresponse: null,
       usersOnProject: null,
-      store,
     };
   },
   async created() {
-    if (store.allProjects == null) {
+    if (this.$store.allProjects == null) {
       const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -103,12 +101,12 @@ export default {
         requestOptions
       );
       this.data = await response.json();
-      store.allProjects = this.data;
+      this.$store.allProjects = this.data;
     } else {
-      this.data = store.allProjects;
+      this.data = this.$store.allProjects;
     }
 
-    if (store.allUsers == null) {
+    if (this.$store.allUsers == null) {
       const requestOptionsU = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -118,9 +116,9 @@ export default {
         requestOptionsU
       );
       this.users = await responseU.json();
-      store.allUsers = this.users;
+      this.$store.allUsers = this.users;
     } else {
-      this.users = store.allUsers;
+      this.users = this.$store.allUsers;
     }
   },
   name: "ProjectWidget",
@@ -134,27 +132,32 @@ export default {
     }),
     onSelect(item) {
       this.selected = item;
-      store.project.id = this.selected.id;
-      store.project.name = this.selected.name;
-      store.project.createDate = this.selected.createDate;
-      store.project.deadlineDate = this.selected.deadlineDate;
-      store.project.description = this.selected.description;
-      store.project.projectManagerId = this.selected.projectManagerId;
-      store.project.users = this.users;
+      this.$store.project.id = this.selected.id;
+      this.$store.project.name = this.selected.name;
+      this.$store.project.createDate = this.selected.createDate;
+      this.$store.project.deadlineDate = this.selected.deadlineDate;
+      this.$store.project.description = this.selected.description;
+      this.$store.project.projectManagerId = this.selected.projectManagerId;
+      this.$store.project.users = this.users;
+      this.$session.set("projectid", this.$store.project.id);
+      this.$session.set("name", this.$store.project.name);
+      this.$session.set("createDate", this.$store.project.createDate);
+      this.$session.set("deadlineDate", this.$store.project.deadlineDate);
+      this.$session.set("description", this.$store.project.description);
+      this.$session.set(
+        "projectManagerId",
+        this.$store.project.projectManagerId
+      );
+      this.$session.set("users", this.$store.project.users);
     },
     async editProjectButton() {
-      this.$router.push({
-        name: "projectedit",
-        params: {
-          id: this.selected.id,
-          name: this.selected.name,
-          createDate: this.selected.createDate,
-          deadlineDate: this.selected.deadlineDate,
-          description: this.selected.description,
-          projectManagerId: this.selected.projectManagerId,
-          users: this.users,
-        },
-      });
+      if (this.selected == null) {
+        alert("You must select project!");
+      } else {
+        this.$router.push({
+          name: "projectedit",
+        });
+      }
     },
     async deleteProject() {
       if (this.selected == null) {
@@ -179,6 +182,16 @@ export default {
       this.$router.push({ path: "/useronproject" });
     },
     goToTasks() {
+      this.$session.set("projectid", this.$store.project.id);
+      this.$session.set("name", this.$store.project.name);
+      this.$session.set("createDate", this.$store.project.createDate);
+      this.$session.set("deadlineDate", this.$store.project.deadlineDate);
+      this.$session.set("description", this.$store.project.description);
+      this.$session.set(
+        "projectManagerId",
+        this.$store.project.projectManagerId
+      );
+      this.$session.set("users", this.$store.project.users);
       this.$router.push({
         path: "/tasks/",
       });
@@ -187,12 +200,14 @@ export default {
       this.$router.push({ path: "/profile" });
     },
     findUserById(ID) {
-      for (let i = 0; i < this.users.length; i++) {
-        if (this.users[i].id == ID) {
-          return this.users[i].email;
+      if (this.users != null) {
+        for (let i = 0; i < this.users.length; i++) {
+          if (this.users[i].id == ID) {
+            return this.users[i].email;
+          }
         }
+        return null;
       }
-      return null;
     },
   },
 };

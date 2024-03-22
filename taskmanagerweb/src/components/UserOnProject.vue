@@ -60,8 +60,6 @@
 </template>
 
 <script>
-import { store } from "@/store";
-
 export default {
   name: "UserOnProject",
   data: () => ({
@@ -76,7 +74,7 @@ export default {
     sending: false,
   }),
   async mounted() {
-    if (store.allUsers == null) {
+    if (this.$store.allUsers == null) {
       const requestOptionsU = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -88,11 +86,11 @@ export default {
       );
 
       this.users = await responseU.json();
-      store.allUsers = this.users;
+      this.$store.allUsers = this.users;
     } else {
-      this.users = store.allUsers;
+      this.users = this.$store.allUsers;
     }
-    if (store.allProjects == null) {
+    if (this.$store.allProjects == null) {
       const requestOptionsP = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -104,9 +102,9 @@ export default {
       );
 
       this.projects = await responseP.json();
-      store.allProjects = this.projects;
+      this.$store.allProjects = this.projects;
     } else {
-      this.projects = store.allProjects;
+      this.projects = this.$store.allProjects;
     }
   },
   methods: {

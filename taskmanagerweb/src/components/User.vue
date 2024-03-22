@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import { store } from "@/store";
 export default {
   name: "UserWidget",
   props: {
@@ -57,11 +56,10 @@ export default {
       selected: null,
       data: null,
       response: null,
-      store,
     };
   },
   async mounted() {
-    if (store.allUsers == null) {
+    if (this.$store.allUsers == null) {
       const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -71,9 +69,9 @@ export default {
         requestOptions
       );
       this.data = await response.json();
-      store.allUsers = this.data;
+      this.$store.allUsers = this.data;
     } else {
-      this.data = store.allUsers;
+      this.data = this.$store.allUsers;
     }
   },
   methods: {

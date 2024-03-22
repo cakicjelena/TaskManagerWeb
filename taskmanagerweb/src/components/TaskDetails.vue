@@ -15,14 +15,14 @@
         </md-table-toolbar>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Name: {{ store.task.name }}</md-table-cell
+            >Name: {{ this.$store.task.name }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
-          <md-table-cell class="profile-cell" v-if="store.task.type == 1"
+          <md-table-cell class="profile-cell" v-if="this.$store.task.type == 1"
             >Type: Ordinary
           </md-table-cell>
-          <md-table-cell class="profile-cell" v-else-if="store.task.type == 2"
+          <md-table-cell class="profile-cell" v-else-if="this.$store.task.type == 2"
             >Type: Bug
           </md-table-cell>
           <md-table-cell class="profile-cell" v-else
@@ -30,7 +30,7 @@
           </md-table-cell>
         </md-table-row>
         <md-table-row>
-          <md-table-cell class="profile-cell" v-if="store.task.status == 1"
+          <md-table-cell class="profile-cell" v-if="this.$store.task.status == 1"
             >Status: To Do</md-table-cell
           >
           <md-table-cell class="profile-cell" v-else-if="store.task.status == 2"
@@ -42,22 +42,22 @@
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Description: {{ store.task.description }}</md-table-cell
+            >Description: {{ this.$store.task.description }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Start date: {{ store.task.startDate }}</md-table-cell
+            >Start date: {{ this.$store.task.startDate }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >Finish Date: {{ store.task.finishDate }}</md-table-cell
+            >Finish Date: {{ this.$store.task.finishDate }}</md-table-cell
           >
         </md-table-row>
         <md-table-row>
           <md-table-cell class="profile-cell"
-            >User: {{ findUserById(store.task.userTask) }}</md-table-cell
+            >User: {{ findUserById(this.$store.task.userTask) }}</md-table-cell
           >
         </md-table-row>
       </md-table>
@@ -96,7 +96,6 @@
 </template>
 
 <script>
-import { store } from "@/store";
 
 export default {
   name: "TaskDetails",
@@ -114,16 +113,15 @@ export default {
     return {
       data: null,
       comments: null,
-      taskId: store.task.id,
-      taskname: store.task.name,
+      taskId: this.$store.task.id,
+      taskname: this.$store.task.name,
       tasktype: null,
       taskstatus: null,
-      taskdescription: store.task.description,
+      taskdescription: this.$store.task.description,
       taskstartDate: null,
-      taskfinishDate: store.task.finishDate,
-      userId: store.task.userTask,
+      taskfinishDate: this.$store.task.finishDate,
+      userId: this.$store.task.userTask,
       users: null,
-      store,
       response: null,
     };
   },
@@ -133,11 +131,11 @@ export default {
       headers: { "Content-Type": "application/json" },
     };
     const response = await fetch(
-      "http://127.0.0.1:8000/getallcommentsoftask/" + store.task.id,
+      "http://127.0.0.1:8000/getallcommentsoftask/" + this.$store.task.id,
       requestOptions
     );
     this.comments = await response.json();
-    if (store.allUsers == null) {
+    if (this.$store.allUsers == null) {
       const requestOptionsU = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -147,9 +145,9 @@ export default {
         requestOptionsU
       );
       this.users = await responseU.json();
-      store.allUsers = this.users;
+      this.$store.allUsers = this.users;
     } else {
-      this.users = store.allUsers;
+      this.users = this.$store.allUsers;
     }
   },
   methods: {
@@ -186,9 +184,9 @@ export default {
       };
       const response = await fetch(
         "http://127.0.0.1:8000/createcommentontask/" +
-          store.user.id +
+          this.$store.user.id +
           "/" +
-          store.task.id,
+          this.$store.task.id,
         requestOptions
       );
 

@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import { store } from "@/store";
 import { convert } from "@/utilities";
 export default {
   name: "taskedit",
@@ -82,15 +81,14 @@ export default {
     users: null,
     sending: false,
     data: null,
-    store,
   }),
   async mounted() {
-    this.form.name = store.task.name;
-    this.form.finishDate = store.task.finishDate;
-    this.form.description = store.task.description;
-    this.form.user = store.task.user;
+    this.form.name = this.$store.task.name;
+    this.form.finishDate = this.$store.task.finishDate;
+    this.form.description = this.$store.task.description;
+    this.form.user = this.$store.task.user;
 
-    if (store.allUsers == null) {
+    if (this.$store.allUsers == null) {
       const requestOptionsU = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -100,9 +98,9 @@ export default {
         requestOptionsU
       );
       this.users = await responseU.json();
-      store.allUsers = this.users;
+      this.$store.allUsers = this.users;
     } else {
-      this.users = store.allUsers;
+      this.users = this.$store.allUsers;
     }
   },
   methods: {
@@ -117,7 +115,7 @@ export default {
         body: JSON.stringify(this.form),
       };
       const response = await fetch(
-        "http://127.0.0.1:8000/edittask/" + store.task.id,
+        "http://127.0.0.1:8000/edittask/" + this.$store.task.id,
         requestOptions
       );
 

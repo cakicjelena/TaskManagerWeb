@@ -96,7 +96,6 @@
 </template>
 
 <script>
-import { store } from "@/store";
 import { convert } from "@/utilities";
 export default {
   name: "TaskCreate",
@@ -116,7 +115,7 @@ export default {
     sending: false,
   }),
   async mounted() {
-    if (store.allUsers == null) {
+    if (this.$store.allUsers == null) {
       const requestOptionsU = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -126,9 +125,9 @@ export default {
         requestOptionsU
       );
       this.users = await responseU.json();
-      store.allUsers = this.users;
+      this.$store.allUsers = this.users;
     } else {
-      this.users = store.allUsers;
+      this.users = this.$store.allUsers;
     }
   },
   methods: {

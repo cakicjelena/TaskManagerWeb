@@ -88,13 +88,13 @@ export default {
     sending: false,
   }),
   mounted() {
-    this.form.first_name = this.$route.params.first_name;
-    this.form.last_name = this.$route.params.last_name;
-    this.form.birthDate = this.$route.params.birthDate;
-    this.form.sex = this.$route.params.sex;
-    this.form.email = this.$route.params.email;
-    this.form.password = this.$route.params.password;
-    this.form.cpassword = this.$route.params.cpassword;
+    this.form.first_name = this.$session.get("first_name");
+    this.form.last_name = this.$session.get("last_name");
+    this.form.birthDate = this.$session.get("birthDate");
+    this.form.sex = this.$session.get("sex");
+    this.form.email = this.$session.get("email");
+    this.form.password = this.$session.get("password");
+    this.form.cpassword = this.$session.get("cpassword");
   },
   methods: {
     clearForm() {
@@ -118,14 +118,28 @@ export default {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify(this.form),
       };
-      const response = await fetch(
-        "http://127.0.0.1:8000/editprofile/" + this.$route.params.id,
+      const response = fetch(
+        "http://127.0.0.1:8000/editprofile/" + this.$session.get("id"),
         requestOptions
       );
 
       this.data = await response.json();
       //this.loading = false;
-      this.$router.push({ path: "/profile" });
+      this.$store.user.id = this.data["id"];
+      this.$store.user.first_name = this.data["first_name"];
+      this.$store.user.last_name = this.data["last_name"];
+      this.$store.user.email = this.data["email"];
+      this.$store.user.sex = this.data["sex"];
+      this.$store.user.birthDate = this.data["birthDate"];
+      this.$store.user.is_superuser = this.data["is_superuser"];
+      this.$session.set("id", this.$store.user.id);
+      this.$session.set("first_name", this.$store.user.first_name);
+      this.$session.set("last_name", this.$store.user.last_name);
+      this.$session.set("email", this.$store.user.email);
+      this.$session.set("sex", this.$store.user.sex);
+      this.$session.set("birthDate", this.$store.user.birthDate);
+      this.$session.set("is_superuser", this.$store.user.is_superuser);
+      this.$router.push({ name: "profile" });
     },
   },
 };
