@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
+    <md-tabs class="md-transparent">
       <md-tab
         id="tab-project"
         md-label="Projects"
@@ -129,7 +129,8 @@ export default {
 
       this.response = await response.json();
       //this.loading = false;
-      this.$router.push({ path: "/projects" });
+      //this.$router.push({ path: "/projects" });
+      alert("Successfully added user on project!");
     },
   },
 };
@@ -141,6 +142,9 @@ export default {
   top: 0;
   right: 0;
   left: 0;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 .md-layout {
   justify-content: center;

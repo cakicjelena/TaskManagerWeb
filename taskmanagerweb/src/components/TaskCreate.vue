@@ -1,5 +1,13 @@
 <template>
   <div>
+    <md-tabs class="md-transparent">
+      <md-tab
+        id="tab-tasks"
+        md-label="Tasks"
+        name="Tasks"
+        v-on:click="gototasks"
+      ></md-tab>
+    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -151,7 +159,8 @@ export default {
 
       this.response = await response.json();
       //this.loading = false;
-      this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
+      //this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
+      alert("Successfully created task!");
     },
     clearForm() {
       this.$v.$reset();
@@ -168,8 +177,7 @@ export default {
       this.clearForm();
     },
     async gototasks() {
-      //vrati me na konkretne taskove
-      //this.$router.push({ path: "/tasks" });
+      this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
     },
   },
 };
@@ -184,5 +192,8 @@ export default {
 }
 .md-layout {
   justify-content: center;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

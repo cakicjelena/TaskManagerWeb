@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
+    <md-tabs class="md-transparent">
       <md-tab
         id="tab-tasks"
         md-label="tasks"
@@ -22,7 +22,9 @@
           <md-table-cell class="profile-cell" v-if="this.$store.task.type == 1"
             >Type: Ordinary
           </md-table-cell>
-          <md-table-cell class="profile-cell" v-else-if="this.$store.task.type == 2"
+          <md-table-cell
+            class="profile-cell"
+            v-else-if="this.$store.task.type == 2"
             >Type: Bug
           </md-table-cell>
           <md-table-cell class="profile-cell" v-else
@@ -30,10 +32,14 @@
           </md-table-cell>
         </md-table-row>
         <md-table-row>
-          <md-table-cell class="profile-cell" v-if="this.$store.task.status == 1"
+          <md-table-cell
+            class="profile-cell"
+            v-if="this.$store.task.status == 1"
             >Status: To Do</md-table-cell
           >
-          <md-table-cell class="profile-cell" v-else-if="store.task.status == 2"
+          <md-table-cell
+            class="profile-cell"
+            v-else-if="this.$store.task.status == 2"
             >Status: In Progress</md-table-cell
           >
           <md-table-cell class="profile-cell" v-else
@@ -96,7 +102,6 @@
 </template>
 
 <script>
-
 export default {
   name: "TaskDetails",
 
@@ -126,7 +131,7 @@ export default {
     };
   },
   async mounted() {
-    const requestOptions = {
+      const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
@@ -151,9 +156,6 @@ export default {
     }
   },
   methods: {
-    async gototasks() {
-      this.$router.back();
-    },
     editTask(ID, name, desc, finDate, u) {
       this.$router.push({
         path: "/taskedit",
@@ -174,6 +176,7 @@ export default {
       }
       return null;
     },
+    //kako da se automatski doda komentar kad se klikne na dugme??
     async leaveComment() {
       const requestOptions = {
         method: "POST",
@@ -192,7 +195,10 @@ export default {
 
       this.response = await response.json();
       //this.loading = false;
-      //this.$router.go();
+      this.$router.go();
+    },
+    async gototasks() {
+      this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
     },
   },
 };
@@ -201,8 +207,8 @@ export default {
 .profile-cell {
   text-align: justify;
 }
-md-tabs {
-  color: #e1bee7;
+.md-tabs {
+  background-color: #fac8ee;
 }
 .ceo-div {
   display: flex;

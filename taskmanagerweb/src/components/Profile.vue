@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
+    <md-tabs class="md-transparent">
       <md-tab
         id="tab-projecs"
         md-label="Projects"
@@ -141,5 +141,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

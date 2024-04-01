@@ -1,5 +1,13 @@
 <template>
   <div>
+    <md-tabs class="md-transparent">
+      <md-tab
+        id="tab-tasks"
+        md-label="Tasks"
+        name="Tasks"
+        v-on:click="gototasks"
+      ></md-tab>
+    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -107,7 +115,7 @@ export default {
     async taskedit() {
       this.form.user = this.getIdByEmail(this.form.user);
       this.form.finishDate = convert(this.form.finishDate);
-      alert(this.form.user);
+      //alert(this.form.user);
       this.loading = true;
       const requestOptions = {
         method: "POST",
@@ -121,7 +129,8 @@ export default {
 
       this.data = await response.json();
       //this.loading = false;
-      this.$router.push({ path: "/tasks" });
+      //this.$router.push({ path: "/tasks" });
+      alert("Successfully edited task!");
     },
     getIdByEmail(email) {
       for (let i = 0; i < this.users.length; i++) {
@@ -130,6 +139,9 @@ export default {
         }
       }
       return null;
+    },
+    async gototasks() {
+      this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
     },
   },
 };
@@ -144,5 +156,8 @@ export default {
 }
 .md-layout {
   justify-content: center;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

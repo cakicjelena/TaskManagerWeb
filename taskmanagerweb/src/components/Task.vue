@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
+    <md-tabs class="md-transparent">
       <md-tab
         id="tab-project"
         md-label="Projects"
@@ -290,5 +290,8 @@ export default {
 }
 #chose {
   background-color: aqua;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

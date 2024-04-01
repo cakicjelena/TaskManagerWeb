@@ -112,18 +112,7 @@ export default {
   .form {
     margin-bottom: 60px;
   }
-  .background {
-    background: url(https://img.freepik.com/free-photo/abstract-smoke-wallpaper-background-desktop_53876-133380.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1710115200&semt=ais);
-    position: absolute;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: 100% 100%;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    z-index: 0;
-  }
+
   .md-content {
     z-index: 1;
     padding: 40px;

@@ -1,5 +1,13 @@
 <template>
   <div>
+    <md-tabs class="md-transparent">
+      <md-tab
+        id="tab-projecs"
+        md-label="Projects"
+        name="Projects"
+        v-on:click="gotoprojects"
+      ></md-tab>
+    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -86,7 +94,7 @@ export default {
       this.form.projectManagerId = this.getIdByEmail(
         this.form.projectManagerId
       );
-      alert(this.form.projectManagerId);
+      //alert(this.form.projectManagerId);
       this.loading = true;
       const requestOptions = {
         method: "POST",
@@ -100,7 +108,8 @@ export default {
 
       this.data = await response.json();
       //this.loading = false;
-      this.$router.push({ path: "/project" });
+      //this.$router.push({ path: "/project" });
+      alert("Successfully edited project!");
     },
     getIdByEmail(email) {
       for (let i = 0; i < this.users.length; i++) {
@@ -109,6 +118,9 @@ export default {
         }
       }
       return null;
+    },
+    async gotoprojects() {
+      this.$router.push({ name: "projects" });
     },
   },
 };
@@ -123,5 +135,8 @@ export default {
 }
 .md-layout {
   justify-content: center;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

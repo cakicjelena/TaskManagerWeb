@@ -1,5 +1,13 @@
 <template>
   <div>
+    <md-tabs class="md-transparent">
+      <md-tab
+        id="tab-profile"
+        md-label="Profile"
+        name="Profile"
+        v-on:click="gotoprofile"
+      ></md-tab>
+    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -97,6 +105,9 @@ export default {
     this.form.cpassword = this.$session.get("cpassword");
   },
   methods: {
+    async gotoprofile() {
+      this.$router.push({ path: "/profile" });
+    },
     clearForm() {
       this.$v.$reset();
       this.form.first_name = null;
@@ -139,7 +150,8 @@ export default {
       this.$session.set("sex", this.$store.user.sex);
       this.$session.set("birthDate", this.$store.user.birthDate);
       this.$session.set("is_superuser", this.$store.user.is_superuser);
-      this.$router.push({ name: "profile" });
+      alert("Successfully edited profile!");
+      //this.$router.push({ name: "profile" });
     },
   },
 };
@@ -154,5 +166,8 @@ export default {
 }
 .md-layout {
   justify-content: center;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

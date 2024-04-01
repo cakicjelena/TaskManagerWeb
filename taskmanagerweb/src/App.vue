@@ -32,7 +32,7 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 .background {
-  background: url(https://img.freepik.com/free-photo/abstract-smoke-wallpaper-background-desktop_53876-133380.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1710115200&semt=ais);
+  background: url("../public/background.jpg");
   position: absolute;
   background-repeat: no-repeat;
   background-attachment: fixed;

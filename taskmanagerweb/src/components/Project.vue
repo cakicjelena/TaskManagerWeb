@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-tabs class="md-primary">
+    <md-tabs class="md-transparent">
       <md-tab
         id="tab-profile"
         md-label="Profile"
@@ -216,5 +216,8 @@ export default {
 <style lang="scss">
 .buttonClass {
   margin: 10px;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>

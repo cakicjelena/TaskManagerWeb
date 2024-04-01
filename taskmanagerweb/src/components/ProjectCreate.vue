@@ -1,5 +1,13 @@
 <template>
   <div>
+    <md-tabs class="md-transparent">
+      <md-tab
+        id="tab-projecs"
+        md-label="Projects"
+        name="Projects"
+        v-on:click="gotoprojects"
+      ></md-tab>
+    </md-tabs>
     <form novalidate class="md-layout">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -142,7 +150,11 @@ export default {
 
       this.response = await response.json();
       //this.loading = false;
-      this.$router.push({ path: "/projects" });
+      //this.$router.push({ path: "/projects" });
+      alert("Successfully created project!");
+    },
+    async gotoprojects() {
+      this.$router.push({ name: "projects" });
     },
   },
 };
@@ -157,5 +169,8 @@ export default {
 }
 .md-layout {
   justify-content: center;
+}
+.md-tabs {
+  background-color: #fac8ee;
 }
 </style>
