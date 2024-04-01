@@ -115,17 +115,24 @@ export default {
     };
   },
   async mounted() {
+    var userUrl =
+      "http://127.0.0.1:8000/getalltasksofuser/" + this.$session.get("id");
+    var adminUrl =
+      "http://127.0.0.1:8000/getalltasksofproject/" +
+      this.$session.get("projectid");
+    var currentUrl = "";
+    if (this.$store.user.is_superuser) {
+      currentUrl = adminUrl;
+    } else {
+      currentUrl = userUrl;
+    }
     this.projectId = this.$store.project.id;
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
 
-    const response = await fetch(
-      "http://127.0.0.1:8000/getalltasksofproject/" +
-        this.$session.get("projectid"),
-      requestOptions
-    );
+    const response = await fetch(currentUrl, requestOptions);
 
     this.data = await response.json();
     this.initTasks();

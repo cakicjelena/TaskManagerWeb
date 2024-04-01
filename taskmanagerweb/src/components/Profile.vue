@@ -8,6 +8,7 @@
         v-on:click="gotoprojects"
       ></md-tab>
       <md-tab
+        v-if="this.$store.user.is_superuser"
         id="tab-users"
         md-label="Users"
         name="Users"
@@ -117,7 +118,9 @@ export default {
         requestOptions
       );
       this.data = await response.json();
+
       this.$router.push({ path: "/" });
+      this.$router.go();
     },
     async editprofile() {
       this.$router.push({

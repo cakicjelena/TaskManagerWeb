@@ -8,11 +8,13 @@
         v-on:click="gotoprofile"
       ></md-tab>
       <md-tab
+        v-if="this.$store.user.is_superuser"
         id="tab-projectcreate"
         md-label="New project"
         @click="createProject"
       ></md-tab>
       <md-tab
+        v-if="this.$store.user.is_superuser"
         id="tab-projectputuser"
         md-label="Put user on project"
         @click="putUserOnProject"
@@ -70,10 +72,18 @@
     </md-table>
 
     <b-form>
-      <b-button variant="info" @click="editProjectButton" class="buttonClass"
+      <b-button
+        v-if="this.$store.user.is_superuser"
+        variant="info"
+        @click="editProjectButton"
+        class="buttonClass"
         >EDIT PROJECT</b-button
       >
-      <b-button variant="info" @click="deleteProject" class="buttonClass"
+      <b-button
+        v-if="this.$store.user.is_superuser"
+        variant="info"
+        @click="deleteProject"
+        class="buttonClass"
         >DELETE PROJECT</b-button
       >
     </b-form>
@@ -91,15 +101,22 @@ export default {
     };
   },
   async created() {
+    var adminUrl = "http://127.0.0.1:8000/getallprojects/";
+    var userUrl =
+      "http://127.0.0.1:8000/getallprojectsofuser/" + this.$session.get("id");
+    var currentUrl = "";
+    if (this.$store.user.is_superuser) {
+      currentUrl = adminUrl;
+    } else {
+      currentUrl = userUrl;
+    }
     if (this.$store.allProjects == null) {
       const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       };
-      const response = await fetch(
-        "http://127.0.0.1:8000/getallprojects/",
-        requestOptions
-      );
+
+      const response = await fetch(currentUrl, requestOptions);
       this.data = await response.json();
       this.$store.allProjects = this.data;
     } else {
