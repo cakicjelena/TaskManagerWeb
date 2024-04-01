@@ -143,13 +143,13 @@ export default {
       this.$store.user.sex = this.data["sex"];
       this.$store.user.birthDate = this.data["birthDate"];
       this.$store.user.is_superuser = this.data["is_superuser"];
-      this.$session.set("id", this.$store.user.id);
-      this.$session.set("first_name", this.$store.user.first_name);
-      this.$session.set("last_name", this.$store.user.last_name);
-      this.$session.set("email", this.$store.user.email);
-      this.$session.set("sex", this.$store.user.sex);
-      this.$session.set("birthDate", this.$store.user.birthDate);
-      this.$session.set("is_superuser", this.$store.user.is_superuser);
+      this.$session.set("id", this.data["id"]);
+      this.$session.set("first_name", this.data["first_name"]);
+      this.$session.set("last_name", this.data["last_name"]);
+      this.$session.set("email", this.data["email"]);
+      this.$session.set("sex", this.data["sex"]);
+      this.$session.set("birthDate", this.data["birthDate"]);
+      this.$session.set("is_superuser", this.data["is_superuser"]);
       alert("Successfully edited profile!");
       //this.$router.push({ name: "profile" });
     },

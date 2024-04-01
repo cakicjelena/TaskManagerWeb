@@ -140,6 +140,7 @@ export default {
       this.$store.task.startDate = task.startDate;
       this.$store.task.finishDate = task.finishDate;
       this.$store.task.userTask = task.user;
+      this.$session.set("taskId", task.id);
       this.$router.push({
         name: "taskdetails",
       });

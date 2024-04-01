@@ -131,12 +131,13 @@ export default {
     };
   },
   async mounted() {
-      const requestOptions = {
+    const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
     const response = await fetch(
-      "http://127.0.0.1:8000/getallcommentsoftask/" + this.$store.task.id,
+      "http://127.0.0.1:8000/getallcommentsoftask/" +
+        this.$session.get("taskId"),
       requestOptions
     );
     this.comments = await response.json();
@@ -187,9 +188,9 @@ export default {
       };
       const response = await fetch(
         "http://127.0.0.1:8000/createcommentontask/" +
-          this.$store.user.id +
+          this.$session.get("id") +
           "/" +
-          this.$store.task.id,
+          this.$session.get("taskId"),
         requestOptions
       );
 
