@@ -1,3 +1,6 @@
+//Converting date
+//Param str->String date
+
 export const convert = function (str) {
   var date = new Date(str),
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),

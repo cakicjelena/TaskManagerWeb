@@ -1,3 +1,5 @@
+<!--Component for list of users-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -59,25 +61,36 @@ export default {
     };
   },
   async mounted() {
-    if (this.$store.allUsers == null) {
-      const requestOptions = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-      const response = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptions
-      );
-      this.data = await response.json();
-      this.$store.allUsers = this.data;
-    } else {
-      this.data = this.$store.allUsers;
-    }
+    this.initUser();
   },
   methods: {
+    //Method for initialization User component
+
+    async initUser() {
+      if (this.$store.allUsers == null) {
+        const requestOptions = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+        const response = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptions
+        );
+        this.data = await response.json();
+        this.$store.allUsers = this.data;
+      } else {
+        this.data = this.$store.allUsers;
+      }
+    },
+
+    //Method that leads to Profile page by clicking on navbar item
+
     gotoprofile() {
       this.$router.push({ path: "/profile" });
     },
+
+    //Deleting selected user by clicking on button
+
     async deleteUser() {
       if (this.selected == null) {
         alert("You must select user!");
@@ -94,10 +107,16 @@ export default {
         this.$router.go();
       }
     },
+
+    //Method for getting class of item
+
     getClass: ({ id }) => ({
       "md-primary": id === 2,
       "md-accent": id === 3,
     }),
+
+    //Method for selecting item
+
     onSelect(item) {
       this.selected = item;
     },

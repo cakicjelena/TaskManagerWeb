@@ -1,3 +1,4 @@
+<!--Component for tasks-->
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -115,29 +116,37 @@ export default {
     };
   },
   async mounted() {
-    var userUrl =
-      "http://127.0.0.1:8000/getalltasksofuser/" + this.$session.get("id");
-    var adminUrl =
-      "http://127.0.0.1:8000/getalltasksofproject/" +
-      this.$session.get("projectid");
-    var currentUrl = "";
-    if (this.$store.user.is_superuser) {
-      currentUrl = adminUrl;
-    } else {
-      currentUrl = userUrl;
-    }
-    this.projectId = this.$store.project.id;
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    const response = await fetch(currentUrl, requestOptions);
-
-    this.data = await response.json();
-    this.initTasks();
+    this.initTask();
   },
   methods: {
+    //Method for initialization of task component
+
+    async initTask() {
+      var userUrl =
+        "http://127.0.0.1:8000/getalltasksofuser/" + this.$session.get("id");
+      var adminUrl =
+        "http://127.0.0.1:8000/getalltasksofproject/" +
+        this.$session.get("projectid");
+      var currentUrl = "";
+      if (this.$session.get('is_superuser')) {
+        currentUrl = adminUrl;
+      } else {
+        currentUrl = userUrl;
+      }
+      this.projectId = this.$store.project.id;
+      const requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+
+      const response = await fetch(currentUrl, requestOptions);
+
+      this.data = await response.json();
+      this.initTasks();
+    },
+
+    //Method that leads to taskdetails page by doubleclicking on task
+
     gototaskdetails(task) {
       this.$store.task.id = task.id;
       this.$store.task.name = task.name;
@@ -152,15 +161,24 @@ export default {
         name: "taskdetails",
       });
     },
+
+    //Method that leads to project page by clicking on navbar item
+
     gotoprojects() {
       this.$router.push({ path: "/projects" });
     },
+
+    //Method that leads to taskCreate page by clicking on navbar item
+
     gototaskcreate() {
       this.$router.push({
         path: "/taskcreate",
         query: { projectId: this.projectId },
       });
     },
+
+    //Deleting selected task by clicking on button
+
     async taskdelete() {
       if (this.selected == null) {
         alert("You must select task!");
@@ -178,17 +196,8 @@ export default {
       }
     },
 
-    add: function () {
-      this.list.push({ name: "Testing" });
-    },
-    replace: function () {
-      this.list = [{ name: "web Design" }];
-    },
-    clone: function (e1) {
-      return {
-        name: e1.name + "cloned",
-      };
-    },
+    //Function called when item on TO DO list is added
+
     log1: function (evt) {
       console.log("1");
       if (evt.added != null) {
@@ -196,6 +205,9 @@ export default {
       }
       console.log(evt);
     },
+
+    //Function called when item on IN PROGRESS list is added
+
     log2: function (evt) {
       console.log("2");
       if (evt.added != null) {
@@ -203,6 +215,9 @@ export default {
       }
       console.log(evt);
     },
+
+    //Function called when item on DONE list is added
+
     log3: function (evt) {
       console.log("3");
       if (evt.added != null) {
@@ -210,6 +225,9 @@ export default {
       }
       console.log(evt);
     },
+
+    //Function for changing status of task when task is dragged to another list
+
     changeTaskStatus: async function (taskId, taskStatus) {
       const requestOptions = {
         method: "POST",
@@ -223,6 +241,8 @@ export default {
 
       this.changeresponse = await response.json();
     },
+
+    //Filtering each task in appropriate list
     initTasks: function () {
       for (let i = 0; i < this.data.length; i++) {
         if (this.data[i]["status"] == 1)
@@ -260,6 +280,9 @@ export default {
           });
       }
     },
+
+    //Selecting task item on click
+
     take(task) {
       this.$store.task.id = task.id;
       this.$store.task.name = task.name;

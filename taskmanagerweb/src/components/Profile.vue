@@ -1,3 +1,5 @@
+<!--Commponent for user profile view-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -8,7 +10,7 @@
         v-on:click="gotoprojects"
       ></md-tab>
       <md-tab
-        v-if="this.$store.user.is_superuser"
+        v-if="this.$session.get('is_superuser')"
         id="tab-users"
         md-label="Users"
         name="Users"
@@ -83,25 +85,33 @@ export default {
     };
   },
   mounted() {
-    if (
-      this.$store.user.id == null ||
-      this.$store.user.first_name == null ||
-      this.$store.user.last_name == null ||
-      this.$store.user.email == null ||
-      this.$store.user.sex == null ||
-      this.$store.user.birthDate == null ||
-      this.$store.user.is_superuser == null
-    ) {
-      this.$store.user.id = this.$session.get("id");
-      this.$store.user.first_name = this.$session.get("first_name");
-      this.$store.user.last_name = this.$session.get("last_name");
-      this.$store.user.email = this.$session.get("email");
-      this.$store.user.sex = this.$session.get("sex");
-      this.$store.user.birthDate = this.$session.get("birthDate");
-      this.$store.user.is_superuser = this.$session.get("is_superuser");
-    }
+    this.initProfile();
   },
   methods: {
+    //Method for profile initializaton
+
+    initProfile() {
+      if (
+        this.$store.user.id == null ||
+        this.$store.user.first_name == null ||
+        this.$store.user.last_name == null ||
+        this.$store.user.email == null ||
+        this.$store.user.sex == null ||
+        this.$store.user.birthDate == null ||
+        this.$store.user.is_superuser == null
+      ) {
+        this.$store.user.id = this.$session.get("id");
+        this.$store.user.first_name = this.$session.get("first_name");
+        this.$store.user.last_name = this.$session.get("last_name");
+        this.$store.user.email = this.$session.get("email");
+        this.$store.user.sex = this.$session.get("sex");
+        this.$store.user.birthDate = this.$session.get("birthDate");
+        this.$store.user.is_superuser = this.$session.get("is_superuser");
+      }
+    },
+
+    //Method for loging out
+
     async logout() {
       this.$store.user = null;
       this.$store.project = null;
@@ -122,14 +132,23 @@ export default {
       this.$router.push({ path: "/" });
       this.$router.go();
     },
+
+    //Method that leads to Profile Edit page by clicking on Edit profile button
+
     async editprofile() {
       this.$router.push({
         name: "profileedit",
       });
     },
+
+    //Method that leads to list of projects page by clicking on navbar item
+
     async gotoprojects() {
       this.$router.push({ name: "projects" });
     },
+
+    //Method that leads to list of users page by clicking on navbar item
+
     async gotousers() {
       this.$router.push({ path: "/users" });
     },

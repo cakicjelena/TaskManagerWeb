@@ -1,3 +1,5 @@
+<!--Component for project creating-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -102,22 +104,30 @@ export default {
     sending: false,
   }),
   async mounted() {
-    if (this.$store.allUsers == null) {
-      const requestOptionsU = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-      const responseU = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptionsU
-      );
-      this.users = await responseU.json();
-      this.$store.allUsers = this.users;
-    } else {
-      this.users = this.$store.allUsers;
-    }
+    this.initProjectCreate();
   },
   methods: {
+    //Method for initialization of ProjectCreate component
+
+    async initProjectCreate() {
+      if (this.$store.allUsers == null) {
+        const requestOptionsU = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+        const responseU = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptionsU
+        );
+        this.users = await responseU.json();
+        this.$store.allUsers = this.users;
+      } else {
+        this.users = this.$store.allUsers;
+      }
+    },
+
+    //Method for cleaning form fields
+
     clearForm() {
       this.$v.$reset();
       this.form.name = null;
@@ -126,11 +136,9 @@ export default {
       this.form.description = null;
       this.form.projectManagerId = null;
     },
-    saveUser() {
-      this.sending = true;
 
-      this.clearForm();
-    },
+    //Method for creating project
+
     async createproject() {
       this.form.createDate = convert(this.form.createDate);
       this.form.deadlineDate = convert(this.form.deadlineDate);
@@ -149,10 +157,11 @@ export default {
       );
 
       this.response = await response.json();
-      //this.loading = false;
-      //this.$router.push({ path: "/projects" });
       alert("Successfully created project!");
     },
+
+    //Method that leads to project page by clicking on navbar item
+
     async gotoprojects() {
       this.$router.push({ name: "projects" });
     },

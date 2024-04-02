@@ -1,3 +1,4 @@
+<!--Component for taskDetails-->
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -131,32 +132,40 @@ export default {
     };
   },
   async mounted() {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    const response = await fetch(
-      "http://127.0.0.1:8000/getallcommentsoftask/" +
-        this.$session.get("taskId"),
-      requestOptions
-    );
-    this.comments = await response.json();
-    if (this.$store.allUsers == null) {
-      const requestOptionsU = {
+    this.initTaskDetails();
+  },
+  methods: {
+    //Method for initialization of taskDetails component
+
+    async initTaskDetails() {
+      const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       };
-      const responseU = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptionsU
+      const response = await fetch(
+        "http://127.0.0.1:8000/getallcommentsoftask/" +
+          this.$session.get("taskId"),
+        requestOptions
       );
-      this.users = await responseU.json();
-      this.$store.allUsers = this.users;
-    } else {
-      this.users = this.$store.allUsers;
-    }
-  },
-  methods: {
+      this.comments = await response.json();
+      if (this.$store.allUsers == null) {
+        const requestOptionsU = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+        const responseU = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptionsU
+        );
+        this.users = await responseU.json();
+        this.$store.allUsers = this.users;
+      } else {
+        this.users = this.$store.allUsers;
+      }
+    },
+
+    //Editing task
+
     editTask(ID, name, desc, finDate, u) {
       this.$router.push({
         path: "/taskedit",
@@ -169,15 +178,9 @@ export default {
         },
       });
     },
-    findUserById(ID) {
-      for (let i = 0; i < this.users.length; i++) {
-        if (this.users[i].id == ID) {
-          return this.users[i].email;
-        }
-      }
-      return null;
-    },
-    //kako da se automatski doda komentar kad se klikne na dugme??
+
+    //Method for leaving comment
+
     async leaveComment() {
       const requestOptions = {
         method: "POST",
@@ -198,8 +201,24 @@ export default {
       //this.loading = false;
       this.$router.go();
     },
+
+    //Method that leads to Tasks page by clicking on navbar item
+
     async gototasks() {
       this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
+    },
+
+    //Getting user email by user id
+
+    findUserById(ID) {
+      if (this.users != null) {
+        for (let i = 0; i < this.users.length; i++) {
+          if (this.users[i].id == ID) {
+            return this.users[i].email;
+          }
+        }
+        return null;
+      }
     },
   },
 };

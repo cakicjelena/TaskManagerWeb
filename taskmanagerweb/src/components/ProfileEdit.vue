@@ -1,3 +1,5 @@
+<!--Commponent for editing user profile-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -96,18 +98,29 @@ export default {
     sending: false,
   }),
   mounted() {
-    this.form.first_name = this.$session.get("first_name");
-    this.form.last_name = this.$session.get("last_name");
-    this.form.birthDate = this.$session.get("birthDate");
-    this.form.sex = this.$session.get("sex");
-    this.form.email = this.$session.get("email");
-    this.form.password = this.$session.get("password");
-    this.form.cpassword = this.$session.get("cpassword");
+    this.initProfileEdit();
   },
   methods: {
+    //Method for initialization ProfileEdit
+
+    initProfileEdit() {
+      this.form.first_name = this.$session.get("first_name");
+      this.form.last_name = this.$session.get("last_name");
+      this.form.birthDate = this.$session.get("birthDate");
+      this.form.sex = this.$session.get("sex");
+      this.form.email = this.$session.get("email");
+      this.form.password = this.$session.get("password");
+      this.form.cpassword = this.$session.get("cpassword");
+    },
+
+    //Method that leads to profile page by clicking on navbar item
+
     async gotoprofile() {
       this.$router.push({ path: "/profile" });
     },
+
+    //Cleaning form fields when submited
+
     clearForm() {
       this.$v.$reset();
       this.form.first_name = null;
@@ -119,6 +132,9 @@ export default {
       this.form.cpassword = null;
       this.form.is_superuser = null;
     },
+
+    //Method for submit editing profile
+
     async submit() {
       this.loading = true;
       if (this.password != this.cpassword) {
@@ -151,7 +167,6 @@ export default {
       this.$session.set("birthDate", this.data["birthDate"]);
       this.$session.set("is_superuser", this.data["is_superuser"]);
       alert("Successfully edited profile!");
-      //this.$router.push({ name: "profile" });
     },
   },
 };

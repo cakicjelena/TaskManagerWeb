@@ -1,3 +1,4 @@
+<!--Commponent for registration-->
 <template>
   <div>
     <form novalidate class="md-layout">
@@ -116,9 +117,12 @@ export default {
   }),
 
   methods: {
+    //Method for registration
+
     async register() {
+      this.sending = true;
       this.form.birthDate = convert(this.form.birthDate);
-      this.loading = true;
+
       if (this.password != this.cpassword) {
         alert("Passwords don't match!");
       }
@@ -132,9 +136,12 @@ export default {
       const response = await fetch("http://127.0.0.1:8000/", requestOptions);
 
       this.data = await response.json();
-      //this.loading = false;
+      this.sending = false;
       this.$router.push({ path: "/home" });
     },
+
+    //Cleaning of form fields
+
     clearForm() {
       this.$v.$reset();
       this.form.first_name = null;
@@ -145,11 +152,6 @@ export default {
       this.form.password = null;
       this.form.cpassword = null;
       this.form.is_superuser = null;
-    },
-    saveUser() {
-      this.sending = true;
-
-      this.clearForm();
     },
   },
 };

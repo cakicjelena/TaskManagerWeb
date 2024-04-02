@@ -1,3 +1,5 @@
+<!--Component for creating task-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -123,22 +125,30 @@ export default {
     sending: false,
   }),
   async mounted() {
-    if (this.$store.allUsers == null) {
-      const requestOptionsU = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-      const responseU = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptionsU
-      );
-      this.users = await responseU.json();
-      this.$store.allUsers = this.users;
-    } else {
-      this.users = this.$store.allUsers;
-    }
+    this.initTaskCreate();
   },
   methods: {
+    //Method for initialization TaskCreate component
+
+    async initTaskCreate() {
+      if (this.$store.allUsers == null) {
+        const requestOptionsU = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+        const responseU = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptionsU
+        );
+        this.users = await responseU.json();
+        this.$store.allUsers = this.users;
+      } else {
+        this.users = this.$store.allUsers;
+      }
+    },
+
+    //Method for creating task
+
     async submit() {
       this.form.startDate = convert(this.form.startDate);
       this.form.finishDate = convert(this.form.finishDate);
@@ -158,10 +168,11 @@ export default {
       );
 
       this.response = await response.json();
-      //this.loading = false;
-      //this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
       alert("Successfully created task!");
     },
+
+    //Cleaning fomr fields
+
     clearForm() {
       this.$v.$reset();
       this.form.name = null;
@@ -171,11 +182,9 @@ export default {
       this.form.status = null;
       this.form.type = null;
     },
-    saveUser() {
-      this.sending = true;
 
-      this.clearForm();
-    },
+    //Method that leads to Tasks page by clicking on navbar item
+
     async gototasks() {
       this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
     },

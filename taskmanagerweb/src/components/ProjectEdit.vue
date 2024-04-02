@@ -1,3 +1,5 @@
+<!--Component for project editing-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -81,21 +83,27 @@ export default {
     data: null,
   }),
   async mounted() {
-    this.form.name = this.$session.get("name");
-    this.form.createDate = this.$session.get("createDate");
-    this.form.deadlineDate = this.$session.get("deadlineDate");
-    this.form.description = this.$session.get("description");
-    this.form.projectManagerId = this.$session.get("projectManagerId");
-    this.users = this.$session.get("users");
+    this.initProjectEdit();
   },
   methods: {
+    //Method for initialization of projectEdit component
+
+    initProjectEdit() {
+      this.form.name = this.$session.get("name");
+      this.form.createDate = this.$session.get("createDate");
+      this.form.deadlineDate = this.$session.get("deadlineDate");
+      this.form.description = this.$session.get("description");
+      this.form.projectManagerId = this.$session.get("projectManagerId");
+      this.users = this.$session.get("users");
+    },
+
+    //Method for project editing
+
     async projectedit() {
       this.form.deadlineDate = convert(this.form.deadlineDate);
       this.form.projectManagerId = this.getIdByEmail(
         this.form.projectManagerId
       );
-      //alert(this.form.projectManagerId);
-      this.loading = true;
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -107,10 +115,17 @@ export default {
       );
 
       this.data = await response.json();
-      //this.loading = false;
-      //this.$router.push({ path: "/project" });
       alert("Successfully edited project!");
     },
+
+    //Method that leads to project page by clicking on navbar item
+
+    async gotoprojects() {
+      this.$router.push({ name: "projects" });
+    },
+
+    //Getting user id by user email
+
     getIdByEmail(email) {
       for (let i = 0; i < this.users.length; i++) {
         if (this.users[i].email == email) {
@@ -118,9 +133,6 @@ export default {
         }
       }
       return null;
-    },
-    async gotoprojects() {
-      this.$router.push({ name: "projects" });
     },
   },
 };

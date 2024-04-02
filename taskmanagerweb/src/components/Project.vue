@@ -1,3 +1,5 @@
+<!--Commponent for list of projects view-->
+
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -8,13 +10,13 @@
         v-on:click="gotoprofile"
       ></md-tab>
       <md-tab
-        v-if="this.$store.user.is_superuser"
+        v-if="this.$session.get('is_superuser')"
         id="tab-projectcreate"
         md-label="New project"
         @click="createProject"
       ></md-tab>
       <md-tab
-        v-if="this.$store.user.is_superuser"
+        v-if="this.$session.get('is_superuser')"
         id="tab-projectputuser"
         md-label="Put user on project"
         @click="putUserOnProject"
@@ -73,14 +75,14 @@
 
     <b-form>
       <b-button
-        v-if="this.$store.user.is_superuser"
+        v-if="this.$session.get('is_superuser')"
         variant="info"
         @click="editProjectButton"
         class="buttonClass"
         >EDIT PROJECT</b-button
       >
       <b-button
-        v-if="this.$store.user.is_superuser"
+        v-if="this.$session.get('is_superuser')"
         variant="info"
         @click="deleteProject"
         class="buttonClass"
@@ -100,53 +102,64 @@ export default {
       usersOnProject: null,
     };
   },
-  async created() {
-    var adminUrl = "http://127.0.0.1:8000/getallprojects/";
-    var userUrl =
-      "http://127.0.0.1:8000/getallprojectsofuser/" + this.$session.get("id");
-    var currentUrl = "";
-    if (this.$store.user.is_superuser) {
-      currentUrl = adminUrl;
-    } else {
-      currentUrl = userUrl;
-    }
-    if (this.$store.allProjects == null) {
-      const requestOptions = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-
-      const response = await fetch(currentUrl, requestOptions);
-      this.data = await response.json();
-      this.$store.allProjects = this.data;
-    } else {
-      this.data = this.$store.allProjects;
-    }
-
-    if (this.$store.allUsers == null) {
-      const requestOptionsU = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-      const responseU = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptionsU
-      );
-      this.users = await responseU.json();
-      this.$store.allUsers = this.users;
-    } else {
-      this.users = this.$store.allUsers;
-    }
+  async mounted() {
+    this.initProject();
   },
   name: "ProjectWidget",
   props: {
     msg: String,
   },
   methods: {
+    //Method for project initialization
+
+    async initProject() {
+      var adminUrl = "http://127.0.0.1:8000/getallprojects/";
+      var userUrl =
+        "http://127.0.0.1:8000/getallprojectsofuser/" + this.$session.get("id");
+      var currentUrl = "";
+      if (this.$session.get("is_superuser")) {
+        currentUrl = adminUrl;
+      } else {
+        currentUrl = userUrl;
+      }
+      if (this.$store.allProjects == null) {
+        const requestOptions = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+
+        const response = await fetch(currentUrl, requestOptions);
+        this.data = await response.json();
+        this.$store.allProjects = this.data;
+      } else {
+        this.data = this.$store.allProjects;
+      }
+
+      if (this.$store.allUsers == null) {
+        const requestOptionsU = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+        const responseU = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptionsU
+        );
+        this.users = await responseU.json();
+        this.$store.allUsers = this.users;
+      } else {
+        this.users = this.$store.allUsers;
+      }
+    },
+
+    //Method for getting class of item
+
     getClass: ({ id }) => ({
       "md-primary": id === 2,
       "md-accent": id === 3,
     }),
+
+    //Method for selecting item
+
     onSelect(item) {
       this.selected = item;
       this.$store.project.id = this.selected.id;
@@ -167,6 +180,9 @@ export default {
       );
       this.$session.set("users", this.$store.project.users);
     },
+
+    //Method that leads to Edit Project page by clicking on Edit project button
+
     async editProjectButton() {
       if (this.selected == null) {
         alert("You must select project!");
@@ -176,6 +192,9 @@ export default {
         });
       }
     },
+
+    //Deleting selected project by clicking on delete button
+
     async deleteProject() {
       if (this.selected == null) {
         alert("You must select project!");
@@ -192,12 +211,21 @@ export default {
         this.$router.go();
       }
     },
+
+    //Method that leads to create project page by clicking on navbar item
+
     async createProject() {
       this.$router.push({ path: "/projectcreate" });
     },
+
+    //Method that leads to User on Project page by clicking on navbar item
+
     async putUserOnProject() {
       this.$router.push({ path: "/useronproject" });
     },
+
+    //Method that leads to tasks of selected project by doubleclicking on project item
+
     goToTasks() {
       this.$session.set("projectid", this.$store.project.id);
       this.$session.set("name", this.$store.project.name);
@@ -213,9 +241,15 @@ export default {
         path: "/tasks/",
       });
     },
+
+    //Method that leads to profile page by clicking on navbar item
+
     async gotoprofile() {
       this.$router.push({ path: "/profile" });
     },
+
+    //Getting user email by user id
+
     findUserById(ID) {
       if (this.users != null) {
         for (let i = 0; i < this.users.length; i++) {

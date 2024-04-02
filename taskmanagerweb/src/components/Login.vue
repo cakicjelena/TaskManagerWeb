@@ -1,3 +1,5 @@
+<!--This component is for user login-->
+
 <template>
   <div class="centered-container">
     <md-content class="md-elevation-3">
@@ -49,6 +51,8 @@ export default {
   },
 
   methods: {
+    //Method for login
+
     async login() {
       this.loading = true;
       const requestOptions = {

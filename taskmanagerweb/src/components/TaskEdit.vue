@@ -1,3 +1,4 @@
+<!--Component for Task Editing-->
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -91,32 +92,37 @@ export default {
     data: null,
   }),
   async mounted() {
-    this.form.name = this.$store.task.name;
-    this.form.finishDate = this.$store.task.finishDate;
-    this.form.description = this.$store.task.description;
-    this.form.user = this.$store.task.user;
-
-    if (this.$store.allUsers == null) {
-      const requestOptionsU = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-      const responseU = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptionsU
-      );
-      this.users = await responseU.json();
-      this.$store.allUsers = this.users;
-    } else {
-      this.users = this.$store.allUsers;
-    }
+    this.initTaskEdit();
   },
   methods: {
+    //Method for initialization TaskEdit component
+    async initTaskEdit() {
+      this.form.name = this.$store.task.name;
+      this.form.finishDate = this.$store.task.finishDate;
+      this.form.description = this.$store.task.description;
+      this.form.user = this.$store.task.user;
+
+      if (this.$store.allUsers == null) {
+        const requestOptionsU = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+        const responseU = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptionsU
+        );
+        this.users = await responseU.json();
+        this.$store.allUsers = this.users;
+      } else {
+        this.users = this.$store.allUsers;
+      }
+    },
+
+    //Method for task editing
+
     async taskedit() {
       this.form.user = this.getIdByEmail(this.form.user);
       this.form.finishDate = convert(this.form.finishDate);
-      //alert(this.form.user);
-      this.loading = true;
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -128,10 +134,11 @@ export default {
       );
 
       this.data = await response.json();
-      //this.loading = false;
-      //this.$router.push({ path: "/tasks" });
       alert("Successfully edited task!");
     },
+
+    //Getting user id by user email
+
     getIdByEmail(email) {
       for (let i = 0; i < this.users.length; i++) {
         if (this.users[i].email == email) {
@@ -140,6 +147,9 @@ export default {
       }
       return null;
     },
+
+    //Method that leads to Tasks page by clicking on navbar item
+
     async gototasks() {
       this.$router.push({ path: "/tasks", query: { ID: this.projectId } });
     },

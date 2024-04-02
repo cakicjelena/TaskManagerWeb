@@ -1,3 +1,4 @@
+<!--Component for adding user on project-->
 <template>
   <div>
     <md-tabs class="md-transparent">
@@ -74,43 +75,54 @@ export default {
     sending: false,
   }),
   async mounted() {
-    if (this.$store.allUsers == null) {
-      const requestOptionsU = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-
-      const responseU = await fetch(
-        "http://127.0.0.1:8000/getallusers/",
-        requestOptionsU
-      );
-
-      this.users = await responseU.json();
-      this.$store.allUsers = this.users;
-    } else {
-      this.users = this.$store.allUsers;
-    }
-    if (this.$store.allProjects == null) {
-      const requestOptionsP = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-
-      const responseP = await fetch(
-        "http://127.0.0.1:8000/getallprojects/",
-        requestOptionsP
-      );
-
-      this.projects = await responseP.json();
-      this.$store.allProjects = this.projects;
-    } else {
-      this.projects = this.$store.allProjects;
-    }
+    this.initUserOnProject();
   },
   methods: {
+    //Method for initialization UserOnProject component
+
+    async initUserOnProject() {
+      if (this.$store.allUsers == null) {
+        const requestOptionsU = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+
+        const responseU = await fetch(
+          "http://127.0.0.1:8000/getallusers/",
+          requestOptionsU
+        );
+
+        this.users = await responseU.json();
+        this.$store.allUsers = this.users;
+      } else {
+        this.users = this.$store.allUsers;
+      }
+      if (this.$store.allProjects == null) {
+        const requestOptionsP = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+
+        const responseP = await fetch(
+          "http://127.0.0.1:8000/getallprojects/",
+          requestOptionsP
+        );
+
+        this.projects = await responseP.json();
+        this.$store.allProjects = this.projects;
+      } else {
+        this.projects = this.$store.allProjects;
+      }
+    },
+
+    //Method that leads to Projects page by clicking on navbar item
+
     async gotoproject() {
       this.$router.push({ path: "/projects" });
     },
+
+    //Adding selected user on selected project
+
     async put() {
       const requestOptions = {
         method: "POST",
@@ -128,8 +140,6 @@ export default {
       );
 
       this.response = await response.json();
-      //this.loading = false;
-      //this.$router.push({ path: "/projects" });
       alert("Successfully added user on project!");
     },
   },
